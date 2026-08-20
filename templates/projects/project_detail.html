@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% load static %}{% block title %}{{ project.title }} — AI USE: DECLARED{% endblock %}
+{% block content %}<article class="detail-shell">
+  <div class="detail-top"><div><p class="eyebrow"><span></span> VERIFIED DISCLOSURE</p><h1>{{ project.title }}</h1><p class="detail-lead">{{ project.description }}</p><a class="text-link" href="{{ project.url }}" target="_blank" rel="noopener">Visit project <span>↗</span></a></div>
+  {% if user == project.owner %}<a class="button button-outline" href="{% url 'project_edit' project.pk %}">Edit disclosure</a>{% endif %}</div>
+  <div class="disclosure-panel"><div class="disclosure-copy"><p class="eyebrow light"><span></span> HOW THIS PROJECT WAS MADE</p><h2>{{ project.get_primary_badge_display }}</h2>{% if project.process_note %}<p>{{ project.process_note }}</p>{% else %}<p>This project is registered with the {{ project.get_primary_badge_display }} disclosure category.</p>{% endif %}{% if project.tools_used %}<dl><dt>Tools disclosed</dt><dd>{{ project.tools_used }}</dd></dl>{% endif %}</div>
+  <div class="detail-badges"><img class="primary-display" src="{% static project.primary_image %}" alt="{{ project.get_primary_badge_display }}: primary AI use disclosure">{% for badge in project.qualifier_data %}<img src="{% static badge.image %}" alt="{{ badge.label }}: optional process qualifier">{% endfor %}</div></div>
+  {% if user == project.owner %}<section class="owner-certificate-tools" data-project-tools data-project-title="{{ project.title }}" data-project-url="{{ project.url }}">
+    <div class="tools-heading"><div><p class="eyebrow"><span></span> OWNER TOOLS</p><h2>Use your certificate.</h2><p>Download the registered disclosure or embed it on the project website.</p></div><span class="registered-chip">✓ Publicly registered</span></div>
+    <div class="registered-certificate" data-project-certificate>
+      <div class="certificate-top"><span class="certificate-mark">ai</span><span>AI USE: DECLARED · BY SELECTORA</span><span class="certificate-check">✓</span></div>
+      <h3>{{ project.title }}</h3><a href="{{ project.url }}">{{ project.url }}</a><p>This project discloses its use of AI as:</p>
+      <div class="registered-certificate-badges"><img data-certificate-badge data-label="{{ project.get_primary_badge_display }}" class="registered-primary" src="{% static project.primary_image %}" alt="{{ project.get_primary_badge_display }} disclosure badge">{% for badge in project.qualifier_data %}<img data-certificate-badge data-label="{{ badge.label }}" src="{% static badge.image %}" alt="{{ badge.label }} qualifier badge">{% endfor %}</div>
+      <div class="certificate-foot"><span>AI USE: DECLARED · Registered {{ project.created_at|date:'Y-m-d' }}</span><span>by Selectora · {{ project.pk }}</span></div>
+    </div>
+    <div class="download-actions"><button class="button" type="button" data-download-pdf>Save as PDF</button><button class="button button-outline" type="button" data-download-png>Download PNG</button><button class="button button-outline" type="button" data-download-svg>Download SVG</button></div>
+    <div class="owner-embed"><div><h3>HTML embed</h3><p>Uses remotely hosted SVG assets and links back to this registered record.</p></div><textarea rows="7" readonly data-project-embed aria-label="Certificate HTML embed code"></textarea><button class="button button-outline" type="button" data-copy-project-embed>Copy HTML</button><span data-project-copy-status role="status"></span></div>
+  </section>{% endif %}
+  <div class="record-meta"><div><span>Registered by</span><strong>{{ project.owner.email }}</strong></div><div><span>Published</span><strong>{{ project.created_at|date:"F j, Y" }}</strong></div><div><span>Last updated</span><strong>{{ project.updated_at|date:"F j, Y" }}</strong></div></div>
+</article>{% endblock %}

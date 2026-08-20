@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">AI-GENERATED TEXT</title><desc id="desc">AI participated meaningfully in writing, synthesising, restructuring or expanding this project's text.</desc>
+  <rect x="10" y="10" width="1180" height="340" rx="170" fill="#fff" stroke="#0d0e37" stroke-width="20"/>
+  <rect x="30" y="30" width="1140" height="300" rx="150" fill="#0d0e37"/>
+  <circle cx="180" cy="180" r="117" fill="#fff"/><circle cx="180" cy="180" r="96" fill="#0d0e37"/>
+  <path d="M119 126h122M119 164h91M119 202h112M119 240h70" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round"/>
+  <path d="M239 105l9 24 24 9-24 9-9 24-9-24-24-9 24-9z" fill="#729fd2"/>
+  <rect x="315" y="74" width="8" height="212" fill="#fff" opacity=".9"/>
+  <text x="365" y="207" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-weight="800" font-size="72" letter-spacing="-1">AI-GENERATED TEXT</text>
+</svg>

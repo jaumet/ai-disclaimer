@@ -1,0 +1,35 @@
+{% extends "base.html" %}{% load static %}{% block title %}Create a certificate — AI USE: DECLARED{% endblock %}
+{% block content %}
+<section class="maker-hero"><p class="eyebrow"><span></span> NO ACCOUNT NEEDED</p><h1>Create your certificate.</h1><p>Choose the badges that truthfully describe your process. You can print the resulting certificate immediately. Registration is optional.</p></section>
+<section class="maker-layout" data-certificate-maker>
+  <form class="maker-controls" onsubmit="return false">
+    <fieldset><legend><span>01</span> Identify the project</legend>
+      <div class="maker-field"><label for="maker-title">Project or website name</label><input id="maker-title" type="text" value="My project" maxlength="120" data-maker-title></div>
+      <div class="maker-field"><label for="maker-url">Website URL</label><input id="maker-url" type="url" placeholder="https://example.com" data-maker-url></div>
+    </fieldset>
+    <fieldset><legend><span>02</span> Choose one primary badge</legend>
+      <label><input type="radio" name="maker_primary" value="AI-MADE" data-src="{% static 'badges/primary/01-ai-made.png' %}"><span>AI-MADE</span></label>
+      <label><input type="radio" name="maker_primary" value="AI-ASSISTED" data-src="{% static 'badges/primary/02-ai-assisted.png' %}" checked><span>AI-ASSISTED</span></label>
+      <label><input type="radio" name="maker_primary" value="AI-EDITED" data-src="{% static 'badges/primary/03-ai-edited.png' %}"><span>AI-EDITED</span></label>
+      <label><input type="radio" name="maker_primary" value="NO GENERATIVE AI" data-src="{% static 'badges/primary/04-no-generative-ai.png' %}"><span>NO GENERATIVE AI</span></label>
+      <label><input type="radio" name="maker_primary" value="NO AI USED" data-src="{% static 'badges/primary/05-no-ai-used.png' %}"><span>NO AI USED</span></label>
+    </fieldset>
+    <fieldset><legend><span>03</span> Add optional qualifiers</legend>
+      <label><input type="checkbox" name="maker_qualifier" value="HUMAN-REVIEWED" data-src="{% static 'badges/secondary/01-human-reviewed.png' %}"><span>HUMAN-REVIEWED</span></label>
+      <label><input type="checkbox" name="maker_qualifier" value="AI-TRANSLATED" data-src="{% static 'badges/secondary/02-ai-translated.png' %}"><span>AI-TRANSLATED</span></label>
+      <label><input type="checkbox" name="maker_qualifier" value="SYNTHETIC VOICE" data-src="{% static 'badges/secondary/03-synthetic-voice.png' %}"><span>SYNTHETIC VOICE</span></label>
+      <label><input type="checkbox" name="maker_qualifier" value="AI-GENERATED IMAGES" data-src="{% static 'badges/secondary/04-ai-generated-images.png' %}"><span>AI-GENERATED IMAGES</span></label>
+      <label><input type="checkbox" name="maker_qualifier" value="AI-GENERATED CODE" data-src="{% static 'badges/secondary/05-ai-generated-code.png' %}"><span>AI-GENERATED CODE</span></label>
+      <label><input type="checkbox" name="maker_qualifier" value="AI-GENERATED VIDEO" data-src="{% static 'badges/secondary/06-ai-generated-video.svg' %}"><span>AI-GENERATED VIDEO</span></label>
+      <label><input type="checkbox" name="maker_qualifier" value="AI-GENERATED TEXT" data-src="{% static 'badges/secondary/07-ai-generated-text.svg' %}"><span>AI-GENERATED TEXT</span></label>
+      <p class="compatibility-note" data-maker-note hidden>NO AI USED and NO GENERATIVE AI can only be combined with HUMAN-REVIEWED.</p>
+    </fieldset>
+  </form>
+  <div class="maker-preview-wrap">
+    <div class="maker-preview" data-maker-preview><div class="certificate-top"><span class="certificate-mark">ai</span><span>AI USE: DECLARED · BY SELECTORA</span><span class="certificate-check">✓</span></div><h2 data-certificate-title>My project</h2><a class="certificate-url" data-certificate-url hidden></a><p>This project discloses its use of AI as:</p><div data-maker-badges></div><div class="certificate-foot"><span>Show how AI was used.</span><span>Self-declaration</span></div></div>
+    <div class="maker-actions"><button class="button" type="button" onclick="window.print()">Print or save as PDF</button><a class="text-link" href="{% url 'project_create' %}">Want public verification? Register it →</a></div>
+    <div class="embed-panel"><div class="embed-heading"><div><h3>Embed on your website</h3><p>Copy accessible HTML using remotely hosted badge assets.</p></div><label>Image format <select data-embed-format><option value="svg">SVG</option><option value="png">PNG</option></select></label></div><textarea data-embed-code readonly rows="9" aria-label="HTML embed code"></textarea><button class="button button-outline" type="button" data-copy-embed>Copy HTML</button><span class="copy-status" data-copy-status role="status"></span></div>
+    <p class="maker-disclaimer">This unregistered certificate is a self-declaration and does not appear in the AI USE: DECLARED public registry. Remote assets use <strong>ai.selectora.cc</strong>.</p>
+  </div>
+</section>
+{% endblock %}

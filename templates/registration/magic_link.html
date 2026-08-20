@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block title %}Sign in — AI USE: DECLARED{% endblock %}
+{% block content %}<section class="auth-shell"><div class="auth-card">
+  <p class="eyebrow"><span></span> PASSWORD-FREE ACCESS</p>
+  <h1>Sign in to AI USE: DECLARED.</h1>
+  <p>Enter your email and we’ll send you a secure link. New here? Your account will be created automatically.</p>
+  <form method="post" class="stack-form">{% csrf_token %}{{ form.non_field_errors }}<label for="{{ form.email.id_for_label }}">Email address</label>{{ form.email }}{{ form.email.errors }}<div class="pledge-check">{{ form.pledge }}<label for="{{ form.pledge.id_for_label }}">I commit to the <a href="{% url 'transparency_pledge' %}" target="_blank">AI USE: DECLARED Transparency Pledge</a> and to describing my work truthfully.</label></div>{{ form.pledge.errors }}<button class="button" type="submit">Email me a sign-in link <span>→</span></button></form>
+  <p class="form-note">The link expires after 15 minutes and works only once.</p>
+</div></section>{% endblock %}

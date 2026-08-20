@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}Declared projects — AI USE: DECLARED{% endblock %}
+{% block content %}
+<section class="registry-hero">
+  <p class="eyebrow light"><span></span> AI USE: DECLARED · BY SELECTORA</p>
+  <h1>Declared projects.</h1>
+  <p>Products and creations that wear their process with pride. Every project here has chosen to say publicly how AI was—or was not—part of the work.</p>
+  <div class="registry-stats"><strong>{{ projects|length }}</strong><span>openly disclosed project{{ projects|length|pluralize }}</span></div>
+</section>
+<section class="registry-list page-shell">
+  <div class="section-heading"><div><p class="eyebrow"><span></span> PUBLIC PROJECTS</p><h2>Work with nothing to hide.</h2></div><a class="button" href="{% url 'project_create' %}">Add your project ↗</a></div>
+  {% if projects %}<div class="project-grid">{% for project in projects %}{% include "projects/project_card.html" %}{% endfor %}</div>{% else %}<div class="empty-state"><h2>Be the first to declare it.</h2><p>Show how AI was used and help build a more truthful creative culture.</p><a class="button" href="{% url 'project_create' %}">Register your project</a></div>{% endif %}
+</section>
+{% endblock %}

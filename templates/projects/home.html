@@ -1,0 +1,73 @@
+{% extends "base.html" %}{% load static %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow"><span></span> AI USED? SAY HOW.</p>
+    <h1>AI USE:<br><em>DECLARED</em></h1>
+    <p class="hero-intro"><strong>Show how AI was used.</strong> Give your website or project one clear primary category, then add optional qualifiers that explain the details.</p>
+    <div class="hero-actions">
+      <a class="button choice-button registered-choice" href="{% url 'project_create' %}"><span class="choice-icon" aria-hidden="true">✓</span><span>Register + get public verification</span></a>
+      <span class="choice-or" aria-hidden="true">OR</span>
+      <a class="button choice-button certificate-choice" href="{% url 'certificate_maker' %}"><span>Create a certificate — no account</span><span class="choice-arrow" aria-hidden="true">→</span></a>
+    </div>
+    <div class="classification-formula" aria-label="One primary badge plus optional qualifiers equals a clear AI disclosure"><span><strong>1</strong> PRIMARY BADGE</span><b>+</b><span>OPTIONAL QUALIFIERS</span><b>=</b><span>CLEAR DISCLOSURE</span></div>
+  </div>
+  <div class="hero-visual badge-story" role="img" tabindex="0" aria-label="The twelve AI USE: DECLARED badges float into primary and qualifier columns. AI-Assisted and Human-Reviewed are selected and placed on a disclosure certificate. Hover or focus to pause the animation.">
+    <div class="story-halo" aria-hidden="true"></div>
+    <div class="story-columns" aria-hidden="true"><span>PRIMARY</span><span>QUALIFIERS</span></div>
+    <div class="story-badge p1"><img src="{% static 'badges/primary/01-ai-made.png' %}" alt=""></div>
+    <div class="story-badge p2 is-choice"><img src="{% static 'badges/primary/02-ai-assisted.png' %}" alt=""></div>
+    <div class="story-badge p3"><img src="{% static 'badges/primary/03-ai-edited.png' %}" alt=""></div>
+    <div class="story-badge p4"><img src="{% static 'badges/primary/04-no-generative-ai.png' %}" alt=""></div>
+    <div class="story-badge p5"><img src="{% static 'badges/primary/05-no-ai-used.png' %}" alt=""></div>
+    <div class="story-badge q1 is-choice"><img src="{% static 'badges/secondary/01-human-reviewed.png' %}" alt=""></div>
+    <div class="story-badge q2"><img src="{% static 'badges/secondary/02-ai-translated.png' %}" alt=""></div>
+    <div class="story-badge q3"><img src="{% static 'badges/secondary/03-synthetic-voice.png' %}" alt=""></div>
+    <div class="story-badge q4"><img src="{% static 'badges/secondary/04-ai-generated-images.png' %}" alt=""></div>
+    <div class="story-badge q5"><img src="{% static 'badges/secondary/05-ai-generated-code.png' %}" alt=""></div>
+    <div class="story-badge q6"><img src="{% static 'badges/secondary/06-ai-generated-video.svg' %}" alt=""></div>
+    <div class="story-badge q7"><img src="{% static 'badges/secondary/07-ai-generated-text.svg' %}" alt=""></div>
+    <div class="story-pointer pointer-primary" aria-hidden="true">➤</div>
+    <div class="story-pointer pointer-qualifier" aria-hidden="true">➤</div>
+    <div class="story-certificate" aria-hidden="true">
+      <div class="certificate-top"><span class="certificate-mark">ai</span><span>AI USE: DECLARED · BY SELECTORA</span><span class="certificate-check">✓</span></div>
+      <p>This project was created with</p>
+      <img src="{% static 'badges/primary/02-ai-assisted.png' %}" alt="">
+      <img class="certificate-qualifier" src="{% static 'badges/secondary/01-human-reviewed.png' %}" alt="">
+      <div class="certificate-foot"><span>Show how AI was used.</span><span>Verified record</span></div>
+    </div>
+    <span class="story-spark one" aria-hidden="true">✦</span><span class="story-spark two" aria-hidden="true">✦</span>
+  </div>
+</section>
+
+<section id="how-it-works" class="how-section home-how">
+  <div class="section-heading">
+    <div><p class="eyebrow"><span></span> AI USE: DECLARED · HOW IT WORKS</p><h2>Be transparent.<br>Choose your level.</h2></div>
+    <p>The badges are free for everyone. Registration adds public recognition, trust and a permanent record that others can verify.</p>
+  </div>
+  <div class="path-grid">
+    <article class="path-card registered-path"><span class="path-label">RECOMMENDED</span><div class="step-icon">✓</div><h3>Register and be recognised</h3><p>Create a public, persistent certificate linked to your project. Registration brings greater trust and public recognition because anyone can verify your disclosure in the <a href="{% url 'project_list' %}">AI USE: DECLARED registry</a>.</p><ul><li>Public project page</li><li>Verifiable certificate</li><li>Visible in the registry</li><li>Update your disclosure</li></ul><a class="button registered-choice" href="{% url 'project_create' %}">Register + get public verification <span>↗</span></a></article>
+    <article class="path-card open-path"><span class="path-label">NO ACCOUNT NEEDED</span><div class="step-icon">◇</div><h3>Just create the certificate</h3><p>Like Creative Commons, the badge system is open to use. Choose the badges that describe your process and create a certificate immediately—without an account or public listing.</p><ul><li>No sign-up</li><li>Immediate certificate</li><li>Same disclosure rules</li><li>No public verification page</li></ul><a class="button certificate-choice" href="{% url 'certificate_maker' %}">Create a certificate — no account <span>→</span></a></article>
+  </div>
+</section>
+
+<section class="home-badges">
+  <div class="section-heading"><div><p class="eyebrow"><span></span> A PROPOSED AI-USE CLASSIFICATION</p><h2>A clear classification.<br>Not fine print.</h2></div><p>Start with exactly one primary category, then add every qualifier that meaningfully describes the process. The result is readable at a glance and detailed when needed.</p></div>
+  <h3 class="badge-row-title">Primary badges <span>Choose one</span></h3>
+  <div class="home-badge-grid primary-badge-grid">
+    <a href="{% url 'badge_guide' %}"><img src="{% static 'badges/primary/01-ai-made.png' %}" alt="AI-Made"><span>AI created the essential result.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/primary/02-ai-assisted.png' %}" alt="AI-Assisted"><span>Human-led, with substantial AI help.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/primary/03-ai-edited.png' %}" alt="AI-Edited"><span>Human original, later edited with AI.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/primary/04-no-generative-ai.png' %}" alt="No Generative AI"><span>No generative AI; analytical AI may be used.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/primary/05-no-ai-used.png' %}" alt="No AI Used"><span>No generative or analytical AI used.</span></a>
+  </div>
+  <h3 class="badge-row-title">Optional qualifiers <span>Choose any that apply</span></h3>
+  <div class="home-badge-grid qualifier-badge-grid">
+    <a href="{% url 'badge_guide' %}"><img src="{% static 'badges/secondary/01-human-reviewed.png' %}" alt="Human-Reviewed"><span>Meaningfully reviewed by a person.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/secondary/02-ai-translated.png' %}" alt="AI-Translated"><span>Significant text translated with AI.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/secondary/03-synthetic-voice.png' %}" alt="Synthetic Voice"><span>Contains synthetic or cloned voice.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/secondary/04-ai-generated-images.png' %}" alt="AI-Generated Images"><span>Contains generative AI imagery.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/secondary/05-ai-generated-code.png' %}" alt="AI-Generated Code"><span>AI generated meaningful code.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/secondary/06-ai-generated-video.svg' %}" alt="AI-Generated Video"><span>Contains AI-generated video.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/secondary/07-ai-generated-text.svg' %}" alt="AI-Generated Text"><span>AI materially helped create the text.</span></a>
+  </div>
+  <div class="badges-action"><a class="text-link" href="{% url 'badge_guide' %}">Read every definition and rule <span>→</span></a></div>
+</section>
+
+{% if projects %}<section class="recent-section">
+  <div class="section-heading"><div><p class="eyebrow"><span></span> PUBLIC REGISTRY</p><h2>Recently registered.</h2></div></div>
+  <div class="project-grid">{% for project in projects %}{% include "projects/project_card.html" %}{% endfor %}</div>
+</section>{% endif %}
+
+<section class="cta-band"><div><p class="eyebrow light"><span></span> YOUR WORK. YOUR PROCESS.</p><h2>Ready to make it clear?</h2></div><a class="button button-light" href="{% url 'project_create' %}">Register a project <span>↗</span></a></section>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}{% load static %}{% block title %}The badge guide — AI USE: DECLARED{% endblock %}
+{% block content %}
+<section class="guide-hero"><p class="eyebrow"><span></span> THE AI USE: DECLARED BADGE SYSTEM</p><h1>Show how AI was used.</h1><p>One primary badge describes the project’s overall relationship with AI. Optional qualifiers add useful detail. Choose the most transparent category when more than one seems possible.</p></section>
+<section class="guide-section">
+  <div class="guide-heading"><span>01</span><div><p class="eyebrow"><span></span> CHOOSE EXACTLY ONE</p><h2>Primary badges</h2></div></div>
+  <div class="guide-grid">
+    <article><img src="{% static 'badges/primary/01-ai-made.png' %}" alt="AI-Made badge"><h3>AI-MADE</h3><p>Use when generative AI produced the main or essential part of the result. A person may still have directed, selected, edited or reviewed it.</p><p class="use-when"><strong>For example:</strong> an illustration generated from prompts and then art-directed by a human.</p></article>
+    <article><img src="{% static 'badges/primary/02-ai-assisted.png' %}" alt="AI-Assisted badge"><h3>AI-ASSISTED</h3><p>Use for human-led work where generative AI made substantial contributions to ideas, writing, code, design or production.</p><p class="use-when"><strong>For example:</strong> a developer designed the product while AI generated meaningful portions of its code.</p></article>
+    <article><img src="{% static 'badges/primary/03-ai-edited.png' %}" alt="AI-Edited badge"><h3>AI-EDITED</h3><p>Use when the original content is human-made and AI only appears later for correction, retouching, cleanup, translation or post-production.</p><p class="use-when"><strong>For example:</strong> a human photograph cleaned up with generative removal tools.</p></article>
+    <article><img src="{% static 'badges/primary/04-no-generative-ai.png' %}" alt="No Generative AI, analytical AI may be used badge"><h3>NO GENERATIVE AI</h3><p>Use when no generative AI created or transformed content. Analytical systems for classification, detection, prediction or recommendations may be present.</p><p class="use-when"><strong>For example:</strong> a human-designed app that uses a recommendation algorithm.</p></article>
+    <article><img src="{% static 'badges/primary/05-no-ai-used.png' %}" alt="No AI Used badge"><h3>NO AI USED</h3><p>Use when no generative or analytical AI system was used in producing the project.</p><p class="use-when"><strong>For example:</strong> a hand-coded website made without AI tools or AI-powered features.</p></article>
+  </div>
+</section>
+<section class="guide-section qualifier-guide">
+  <div class="guide-heading"><span>02</span><div><p class="eyebrow"><span></span> ADD ONLY WHAT APPLIES</p><h2>Optional qualifiers</h2></div></div>
+  <div class="guide-grid">
+    <article><img src="{% static 'badges/secondary/01-human-reviewed.png' %}" alt="Human-Reviewed badge"><h3>HUMAN-REVIEWED</h3><p>A person meaningfully reviewed the result before publication. This does not itself certify truth, safety or freedom from errors.</p></article>
+    <article><img src="{% static 'badges/secondary/02-ai-translated.png' %}" alt="AI-Translated badge"><h3>AI-TRANSLATED</h3><p>A significant part of the text was translated using AI. Add HUMAN-REVIEWED when a person properly reviewed the translation.</p></article>
+    <article><img src="{% static 'badges/secondary/03-synthetic-voice.png' %}" alt="Synthetic Voice badge"><h3>SYNTHETIC VOICE</h3><p>The project contains AI-generated narration, synthetic speech or an applicable cloned voice.</p></article>
+    <article><img src="{% static 'badges/secondary/04-ai-generated-images.png' %}" alt="AI-Generated Images badge"><h3>AI-GENERATED IMAGES</h3><p>The project contains images created wholly or partly with generative AI.</p></article>
+    <article><img src="{% static 'badges/secondary/05-ai-generated-code.png' %}" alt="AI-Generated Code badge"><h3>AI-GENERATED CODE</h3><p>AI generated a meaningful portion of the code. Trivial autocomplete alone does not require this badge.</p></article>
+    <article><img src="{% static 'badges/secondary/06-ai-generated-video.svg' %}" alt="AI-Generated Video badge"><h3>AI-GENERATED VIDEO</h3><p>The project contains video created or materially transformed with generative AI, including clips, reels, stories, animation and longer-form sequences.</p></article>
+    <article><img src="{% static 'badges/secondary/07-ai-generated-text.svg' %}" alt="AI-Generated Text badge"><h3>AI-GENERATED TEXT</h3><p>AI participated meaningfully in writing, synthesising, restructuring or expanding the text. Trivial spelling fixes or autocomplete alone do not require this badge.</p></article>
+  </div>
+</section>
+<section class="rules-band"><div><p class="eyebrow light"><span></span> KEEP IT COHERENT</p><h2>Honesty comes before optics.</h2></div><ul><li><strong>NO AI USED</strong> may only be paired with HUMAN-REVIEWED.</li><li><strong>NO GENERATIVE AI</strong> cannot be paired with generative-AI qualifiers.</li><li>When in doubt, choose the category that makes AI’s involvement more visible.</li></ul></section>
+{% endblock %}
