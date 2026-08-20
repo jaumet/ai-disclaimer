@@ -99,8 +99,19 @@ trap cleanup EXIT
 
 cd "$APP_DIR"
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || remote_fail 'App is not a Git checkout.'
-[[ "$(git branch --show-current)" == "prod" ]] || remote_fail "Server checkout must be on branch 'prod'."
 git diff --quiet && git diff --cached --quiet || remote_fail 'Server checkout has tracked local changes. Refusing to overwrite them.'
+
+remote_step 'Preparing the production branch'
+git fetch origin prod
+if [[ "$(git branch --show-current)" != "prod" ]]; then
+    if git show-ref --verify --quiet refs/heads/prod; then
+        git switch prod
+    else
+        git switch --track -c prod origin/prod
+    fi
+fi
+[[ "$(git branch --show-current)" == "prod" ]] || remote_fail "Could not switch the server checkout to 'prod'."
+git diff --quiet && git diff --cached --quiet || remote_fail 'Production branch has tracked local changes.'
 
 if [[ -f "$ENV_FILE" ]]; then
     remote_step "Loading environment from $ENV_FILE"
@@ -122,7 +133,6 @@ else
 fi
 
 remote_step 'Updating production code'
-git fetch origin prod
 git merge --ff-only origin/prod
 [[ "$(git rev-parse HEAD)" == "$EXPECTED_REV" ]] || remote_fail 'Server revision does not match the promoted release.'
 

@@ -48,7 +48,7 @@ Safety checks intentionally stop the deployment when:
 - the GitHub remote is unexpected;
 - tests or Django checks fail;
 - `prod` has diverged from `dev`;
-- the server checkout is not on `prod` or contains local changes;
+- the server checkout contains tracked local changes or cannot safely switch to `prod`;
 - another deployment is running;
 - the production virtualenv or expected directories are missing;
 - the deployed revision does not exactly match the promoted commit.
