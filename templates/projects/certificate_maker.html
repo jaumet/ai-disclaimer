@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% load static %}{% block title %}Create a declaration — AI USE: DECLARED{% endblock %}
+{% extends "base.html" %}{% load static %}{% block title %}Create a declaration — AI USE DECLARED{% endblock %}
 {% block content %}
 <section class="maker-hero"><p class="eyebrow"><span></span> PROJECT AI-USE DISCLOSURE</p><h1>Create a declaration.</h1><p>Choose the badges that describe how AI was used in this project and generate a declaration card for sharing or embedding.</p></section>
 <section class="maker-layout" data-certificate-maker>
@@ -29,10 +29,10 @@
     </fieldset>
   </form>
   <div class="maker-preview-wrap">
-    <div class="maker-preview disclosure-card" data-maker-preview data-card-preview><div class="certificate-top"><span class="certificate-mark official-certificate-logo"><img src="{% static 'images/ai-use-declared-logo.png' %}" alt=""></span><span>AI USE: DECLARED · BY SELECTORA</span><span class="certificate-check">✓</span></div><div class="card-copy"><h2 data-certificate-title>My project</h2><a class="certificate-url" data-certificate-url hidden></a><p>This project discloses its use of AI as:</p></div><div data-maker-badges></div><div class="certificate-foot"><span>Show how AI was used.</span><span>Self-declaration</span></div><a class="disclosure-meaning" href="{% url 'badge_guide' %}">What does this mean? Explore AI USE: DECLARED →</a></div>
+    <div class="maker-preview disclosure-card" data-maker-preview data-card-preview><div class="certificate-top"><span class="certificate-mark official-certificate-logo"><img src="{% static 'images/ai-use-declared-logo.png' %}" alt=""></span><span>AI USE DECLARED · BY SELECTORA</span><span class="certificate-check">✓</span></div><div class="card-copy"><h2 data-certificate-title>My project</h2><a class="certificate-url" data-certificate-url hidden></a><p>This project discloses its use of AI as:</p></div><div data-maker-badges></div><div class="certificate-foot"><span>Show how AI was used.</span><span>Self-declaration</span></div><a class="disclosure-meaning" href="{% url 'badge_guide' %}">What does this mean? Explore AI USE DECLARED →</a></div>
     <div class="maker-actions"><button class="button" type="button" onclick="window.print()">Print or save as PDF</button><a class="text-link" href="{% url 'project_create' %}">Want public verification? Register it →</a></div>
     <div class="embed-panel"><div class="embed-heading"><div><h3>Embed on your website</h3><p>Copy accessible HTML using remotely hosted badge assets.</p></div><label>Image format <select data-embed-format><option value="svg">SVG</option><option value="png">PNG</option></select></label></div><textarea data-embed-code readonly rows="9" aria-label="HTML embed code"></textarea><button class="button button-outline" type="button" data-copy-embed>Copy HTML</button><span class="copy-status" data-copy-status role="status"></span></div>
-    <p class="maker-disclaimer">This is a self-declaration and does not appear in the AI USE: DECLARED public registry. Remote assets use <strong>ai.selectora.cc</strong>.</p>
+    <p class="maker-disclaimer">This is a self-declaration and does not appear in the AI USE DECLARED public registry. Remote assets use <strong>ai.selectora.cc</strong>.</p>
   </div>
 </section>
 {% endblock %}

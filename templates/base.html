@@ -7,13 +7,13 @@
   <link rel="icon" href="{% static 'images/favicon.ico' %}" sizes="16x16 32x32 48x48">
   <meta name="description" content="{% block meta_description %}Show how AI was used. A clear badge system for truthful, public AI disclosure in websites and digital projects.{% endblock %}">
   <meta name="theme-color" content="#0d0e37">
-  <title>{% block title %}AI USE: DECLARED by Selectora{% endblock %}</title>
+  <title>{% block title %}AI USE DECLARED by Selectora{% endblock %}</title>
   <link rel="canonical" href="{{ request.build_absolute_uri }}">
 
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="AI USE: DECLARED by Selectora">
+  <meta property="og:site_name" content="AI USE DECLARED by Selectora">
   <meta property="og:locale" content="en_US">
-  <meta property="og:title" content="{% block og_title %}AI USE: DECLARED — Show how AI was used{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}AI USE DECLARED — Show how AI was used{% endblock %}">
   <meta property="og:description" content="{% block og_description %}Give your website or project one clear AI-use category and optional qualifiers. Make transparency visible, public and verifiable.{% endblock %}">
   <meta property="og:url" content="{{ request.build_absolute_uri }}">
   <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_image_path }}">
@@ -21,13 +21,13 @@
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="AI USE: DECLARED by Selectora — Show how AI was used">
+  <meta property="og:image:alt" content="AI USE DECLARED by Selectora — Show how AI was used">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AI USE: DECLARED — Show how AI was used">
+  <meta name="twitter:title" content="AI USE DECLARED — Show how AI was used">
   <meta name="twitter:description" content="A clear badge system for truthful, public and verifiable AI-use disclosure.">
   <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_image_path }}">
-  <meta name="twitter:image:alt" content="AI USE: DECLARED by Selectora — Show how AI was used">
+  <meta name="twitter:image:alt" content="AI USE DECLARED by Selectora — Show how AI was used">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
@@ -37,7 +37,7 @@
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <a class="brand" href="{% url 'home' %}" aria-label="AI Use: Declared by Selectora home">
-      <span class="official-logo" aria-hidden="true"><img src="{% static 'images/ai-use-declared-logo.png' %}" alt=""></span><span class="brand-copy"><strong>AI USE: DECLARED</strong><small>by Selectora</small></span>
+      <span class="official-logo" aria-hidden="true"><img src="{% static 'images/ai-use-declared-logo.png' %}" alt=""></span><span class="brand-copy"><strong>AI USE DECLARED</strong><small>by Selectora</small></span>
     </a>
     <nav id="main-navigation" class="desktop-navigation" aria-label="Main navigation">
       <a href="{% url 'project_list' %}">Declared projects</a>
@@ -63,11 +63,11 @@
   {% if messages %}<div class="messages" role="status">{% for message in messages %}<div>{{ message }}</div>{% endfor %}</div>{% endif %}
   <main id="main">{% block content %}{% endblock %}</main>
   <aside class="initiative-band" aria-label="About the initiative">
-    <p><strong>AI USE: DECLARATION is a Nu a l’Art initiative.</strong> The campaign grows through people and organisations that believe in transparent AI use.</p>
-    <a class="initiative-join" href="{% url 'join_initiative' %}">Join AI USE: DECLARATION <small>Add your name to the campaign →</small></a>
+    <p><strong>AI USE DECLARATION is a Nu a l'art initiative.</strong> The campaign grows through people and organisations that believe in transparent AI use.</p>
+    <a class="initiative-join" href="{% url 'join_initiative' %}">Join AI USE DECLARATION <small>Add your name to the campaign →</small></a>
   </aside>
   <footer>
-    <a class="brand brand-light" href="{% url 'home' %}"><span class="official-logo footer-logo" aria-hidden="true"><img src="{% static 'images/ai-use-declared-logo.png' %}" alt=""></span><span class="brand-copy"><strong>AI USE: DECLARED</strong><small>by Selectora</small></span></a>
+    <a class="brand brand-light" href="{% url 'home' %}"><span class="official-logo footer-logo" aria-hidden="true"><img src="{% static 'images/ai-use-declared-logo.png' %}" alt=""></span><span class="brand-copy"><strong>AI USE DECLARED</strong><small>by Selectora</small></span></a>
     <p><a href="{% url 'project_list' %}">Declared projects</a> · <a href="{% url 'badge_guide' %}">Badge guide</a></p>
     <p class="footer-note"><a href="{% url 'transparency_pledge' %}">Transparency Pledge</a><br>Show how AI was used.</p>
   </footer>

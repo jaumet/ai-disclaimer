@@ -75,7 +75,7 @@ def _complete_magic_login(request, link):
     request.session.pop("pending_magic_link_id", None)
     request.session.pop("pending_magic_email", None)
     request.session.pop("pending_magic_code", None)
-    messages.success(request, "You’re signed in. Welcome to AI USE: DECLARED.")
+    messages.success(request, "You’re signed in. Welcome to AI USE DECLARED.")
     return redirect("dashboard")
 
 
@@ -92,7 +92,7 @@ def request_magic_link(request):
             user.save(update_fields=["email"])
         link, token, code = MagicLink.issue(user)
         url = request.build_absolute_uri(f"/auth/verify/{token}/")
-        send_mail("Your AI USE: DECLARED sign-in link", f"Sign in to AI USE: DECLARED by Selectora:\n\n{url}\n\nVerification code: {code}\n\nBy using this link or code, you confirm the Transparency Pledge (version {PLEDGE_VERSION}). This access expires in 15 minutes and can only be used once.", None, [email])
+        send_mail("Your AI USE DECLARED sign-in link", f"Sign in to AI USE DECLARED by Selectora:\n\n{url}\n\nVerification code: {code}\n\nBy using this link or code, you confirm the Transparency Pledge (version {PLEDGE_VERSION}). This access expires in 15 minutes and can only be used once.", None, [email])
         is_local = _is_local_request(request)
         if is_local:
             request.session["pending_magic_link_id"] = link.pk

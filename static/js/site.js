@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
       context.strokeStyle = "#d6d6dc"; context.lineWidth = 2; context.strokeRect(18, 18, width - 36, canvas.height - 36);
       context.save(); context.beginPath(); context.arc(pad + 18, 75, 18, 0, Math.PI * 2); context.clip();
       context.drawImage(officialLogo, 70, 70, 1115, 1115, pad, 57, 36, 36); context.restore();
-      context.textAlign = "left"; context.fillStyle = foreground; context.font = "bold 15px Arial"; context.fillText("AI USE: DECLARED · BY SELECTORA", pad + 52, 81);
+      context.textAlign = "left"; context.fillStyle = foreground; context.font = "bold 15px Arial"; context.fillText("AI USE DECLARED · BY SELECTORA", pad + 52, 81);
       context.fillStyle = cardAccent; context.beginPath(); context.arc(width - pad - 18, 75, 18, 0, Math.PI * 2); context.fill();
       context.fillStyle = "#0d0e37"; context.font = "bold 18px Arial"; context.textAlign = "center"; context.fillText("✓", width - pad - 18, 82);
       context.strokeStyle = "#d6d6dc"; context.beginPath(); context.moveTo(pad, 115); context.lineTo(width - pad, 115); context.stroke();
@@ -77,9 +77,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (col === 1 || index === images.length - 2) y += Math.max(...qualifierHeights.slice(Math.floor(index / 2) * 2, Math.floor(index / 2) * 2 + 2)) + gap;
       });
       const footerY = canvas.height - 58; context.strokeStyle = "#d6d6dc"; context.beginPath(); context.moveTo(pad, footerY - 26); context.lineTo(width - pad, footerY - 26); context.stroke();
-      context.fillStyle = mutedForeground; context.font = "14px Arial"; context.fillText("AI USE: DECLARED · BY SELECTORA", pad, footerY);
+      context.fillStyle = mutedForeground; context.font = "14px Arial"; context.fillText("AI USE DECLARED · BY SELECTORA", pad, footerY);
       context.textAlign = "right"; context.fillText(window.location.href, width - pad, footerY);
-      context.textAlign = "left"; context.fillStyle = cardBackground === "dark" ? "#ffffff" : "#0d0e37"; context.font = "bold 16px Arial"; context.fillText("What does this mean? Explore AI USE: DECLARED → ai.selectora.cc/badges/", pad, footerY + 35);
+      context.textAlign = "left"; context.fillStyle = cardBackground === "dark" ? "#ffffff" : "#0d0e37"; context.font = "bold 16px Arial"; context.fillText("What does this mean? Explore AI USE DECLARED → ai.selectora.cc/badges/", pad, footerY + 35);
       return canvas;
     }
     const download = (href, filename) => { const link = document.createElement("a"); link.href = href; link.download = filename; link.click(); };
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
   </style>
   <a class="aiud-trigger" href="${disclosureUrl}" target="aiud_disclosure" aria-describedby="aiud-details-${slug}" onclick="window.open(this.href,'aiud_disclosure','popup=yes,width=680,height=760,resizable=yes,scrollbars=yes');return false;">
     <span class="aiud-logo"><img src="https://ai.selectora.cc/static/images/ai-use-declared-logo.png" alt=""></span>
-    <span class="aiud-label">AI USE: DECLARED<small>Hover to see how AI was used</small></span>
+    <span class="aiud-label">AI USE DECLARED<small>Hover to see how AI was used</small></span>
   </a>
   <div class="aiud-details" id="aiud-details-${slug}" role="tooltip">
     <p><strong>${escapeMarkup(title)}</strong><br>This project discloses its use of AI as:</p>
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
 ${imageHtml}
     </div>
     <a href="${disclosureUrl}" target="aiud_disclosure">View registered disclosure →</a>
-    <a class="aiud-meaning" href="https://ai.selectora.cc/badges/" target="_blank">What does this mean? Explore AI USE: DECLARED →</a>
+    <a class="aiud-meaning" href="https://ai.selectora.cc/badges/" target="_blank">What does this mean? Explore AI USE DECLARED →</a>
   </div>
 </div>`;
     const demoDialog = projectTools.querySelector("[data-embed-demo]");
@@ -203,7 +203,7 @@ ${imageHtml}
       const wrapperTag = projectUrl ? `a href="${escapeHtml(projectUrl)}"` : "div";
       const closingTag = projectUrl ? "a" : "div";
       const layoutCss = layout === "horizontal" ? "display:grid;grid-template-columns:minmax(150px,.7fr) minmax(260px,1.3fr);gap:8px 14px;align-items:start" : layout === "minimal" ? "max-width:420px;padding:10px" : "max-width:680px;padding:18px";
-      embedCode.value = `<div class="ai-use-declared" style="${layoutCss};box-sizing:border-box;border:1px solid ${accent};border-radius:10px;background:${backgroundColor};color:${textColor};font:14px/1.4 system-ui,sans-serif" aria-label="AI use disclosure for ${escapeHtml(title)}">\n  <p style="margin:0 0 8px"><strong>${escapeHtml(title)}</strong> discloses its use of AI as:</p>\n  <${wrapperTag} style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;color:inherit;text-decoration:none">\n${imageHtml}\n  </${closingTag}>\n  <a href="https://ai.selectora.cc/badges/" style="grid-column:1/-1;margin-top:8px;padding-top:8px;border-top:1px solid ${accent};color:inherit;font-size:11px;font-weight:700">What does this mean? Explore AI USE: DECLARED →</a>\n</div>`;
+      embedCode.value = `<div class="ai-use-declared" style="${layoutCss};box-sizing:border-box;border:1px solid ${accent};border-radius:10px;background:${backgroundColor};color:${textColor};font:14px/1.4 system-ui,sans-serif" aria-label="AI use disclosure for ${escapeHtml(title)}">\n  <p style="margin:0 0 8px"><strong>${escapeHtml(title)}</strong> discloses its use of AI as:</p>\n  <${wrapperTag} style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;color:inherit;text-decoration:none">\n${imageHtml}\n  </${closingTag}>\n  <a href="https://ai.selectora.cc/badges/" style="grid-column:1/-1;margin-top:8px;padding-top:8px;border-top:1px solid ${accent};color:inherit;font-size:11px;font-weight:700">What does this mean? Explore AI USE DECLARED →</a>\n</div>`;
     }
     [...primaryInputs, ...qualifierInputs, embedFormat].forEach(input => input.addEventListener("change", updateMaker));
     [titleInput, urlInput].forEach(input => input.addEventListener("input", updateMaker));

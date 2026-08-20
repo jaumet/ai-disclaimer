@@ -5,7 +5,7 @@ from .models import Adhesion, PRIMARY_BADGES, QUALIFIER_BADGES, Project
 class AdhesionForm(forms.ModelForm):
     accept_pledge = forms.BooleanField(
         required=True,
-        label="I have read and accept the AI USE: DECLARED Transparency Pledge.",
+        label="I have read and accept the AI USE DECLARED Transparency Pledge.",
         error_messages={"required": "Accept the Transparency Pledge to join the initiative."},
     )
 
@@ -45,7 +45,7 @@ class MagicLinkForm(forms.Form):
     }))
     pledge = forms.BooleanField(
         required=True,
-        label="I commit to the AI USE: DECLARED Transparency Pledge and to describing my work truthfully.",
+        label="I commit to the AI USE DECLARED Transparency Pledge and to describing my work truthfully.",
         error_messages={"required": "You must accept the Transparency Pledge to continue."},
     )
 

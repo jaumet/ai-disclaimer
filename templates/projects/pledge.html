@@ -1,15 +1,15 @@
-{% extends "base.html" %}{% load static %}{% block title %}Transparency Pledge — AI USE: DECLARED{% endblock %}
+{% extends "base.html" %}{% load static %}{% block title %}Transparency Pledge — AI USE DECLARED{% endblock %}
 {% block content %}
 <article class="pledge-page">
-  <header><p class="eyebrow"><span></span> VERSION {{ pledge_version }} · AI USE: DECLARED STANDARD</p><h1>The Transparency Pledge.</h1><p>Publishing how something was made is an act of respect—for audiences, collaborators and the work itself. Everyone joining AI USE: DECLARED commits to these principles.</p><div class="pledge-audio"><span aria-hidden="true">▶</span><div><strong>Listen to the pledge</strong><audio controls preload="metadata" src="{% static 'audio/transparency-pledge-en.mp3' %}">Your browser does not support audio playback.</audio></div></div></header>
+  <header><p class="eyebrow"><span></span> VERSION {{ pledge_version }} · AI USE DECLARED STANDARD</p><h1>The Transparency Pledge.</h1><p>Publishing how something was made is an act of respect—for audiences, collaborators and the work itself. Everyone joining AI USE DECLARED commits to these principles.</p><div class="pledge-audio"><span aria-hidden="true">▶</span><div><strong>Listen to the pledge</strong><audio controls preload="metadata" src="{% static 'audio/transparency-pledge-en.mp3' %}">Your browser does not support audio playback.</audio></div></div></header>
   <ol class="pledge-principles">
     <li><span>01</span><div><h2>Tell the truth.</h2><p>I will describe the role of AI accurately and will not minimise, exaggerate or conceal its contribution.</p></div></li>
     <li><span>02</span><div><h2>Choose the clearest badge.</h2><p>When more than one category seems possible, I will choose the one that makes AI’s involvement most visible.</p></div></li>
     <li><span>03</span><div><h2>Give credit responsibly.</h2><p>I will not use transparency badges to erase the work, rights or authorship of collaborators and source creators.</p></div></li>
     <li><span>04</span><div><h2>Keep the record current.</h2><p>If the project or its process changes materially, I will update its disclosure.</p></div></li>
-    <li><span>05</span><div><h2>Do not imply independent verification.</h2><p>I understand that AI USE: DECLARED records a personal or organisational declaration. It does not independently verify accuracy, legality, safety, quality or ownership.</p></div></li>
+    <li><span>05</span><div><h2>Do not imply independent verification.</h2><p>I understand that AI USE DECLARED records a personal or organisational declaration. It does not independently verify accuracy, legality, safety, quality or ownership.</p></div></li>
     <li><span>06</span><div><h2>Correct mistakes openly.</h2><p>If I discover that a disclosure is misleading or wrong, I will correct it promptly rather than leave a false impression.</p></div></li>
   </ol>
-  <aside class="pledge-closing"><span>✦</span><div><h2>Transparency is part of the craft.</h2><p>By creating or accessing an AI USE: DECLARED account, you affirm this pledge and take responsibility for the disclosures you publish.</p><a class="button" href="{% url 'request_magic_link' %}">Join the registry →</a></div></aside>
+  <aside class="pledge-closing"><span>✦</span><div><h2>Transparency is part of the craft.</h2><p>By creating or accessing an AI USE DECLARED account, you affirm this pledge and take responsibility for the disclosures you publish.</p><a class="button" href="{% url 'request_magic_link' %}">Join the registry →</a></div></aside>
 </article>
 {% endblock %}
