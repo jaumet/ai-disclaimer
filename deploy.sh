@@ -7,6 +7,7 @@ set -Eeuo pipefail
 
 readonly EXPECTED_BRANCH="dev"
 readonly EXPECTED_REPOSITORY="jaumet/ai-disclaimer"
+readonly GITHUB_READ_URL="https://github.com/jaumet/ai-disclaimer.git"
 readonly DEPLOY_HOST="${DEPLOY_HOST:-phab}"
 readonly REMOTE_APP="${DEPLOY_REMOTE_APP:-/server/ai.selectora.cc/prod/app}"
 readonly REMOTE_DATA="${DEPLOY_REMOTE_DATA:-/server/ai.selectora.cc/prod/data}"
@@ -75,7 +76,7 @@ readonly RELEASE_REV="$(git rev-parse HEAD)"
 step "Deploying $RELEASE_REV to $DEPLOY_HOST"
 
 ssh "$DEPLOY_HOST" bash -s -- \
-    "$REMOTE_APP" "$REMOTE_DATA" "$REMOTE_VENV" "$REMOTE_ENV" "$RESTART_CMD" "$RELEASE_REV" <<'REMOTE_SCRIPT'
+    "$REMOTE_APP" "$REMOTE_DATA" "$REMOTE_VENV" "$REMOTE_ENV" "$RESTART_CMD" "$RELEASE_REV" "$GITHUB_READ_URL" <<'REMOTE_SCRIPT'
 set -Eeuo pipefail
 
 readonly APP_DIR="$1"
@@ -84,6 +85,7 @@ readonly VENV_DIR="$3"
 readonly ENV_FILE="$4"
 readonly RESTART_CMD="$5"
 readonly EXPECTED_REV="$6"
+readonly GITHUB_READ_URL="$7"
 readonly LOCK_DIR="${APP_DIR%/}/../.deploy-lock"
 
 remote_fail() { printf 'REMOTE ERROR: %s\n' "$*" >&2; exit 1; }
@@ -102,7 +104,7 @@ git rev-parse --is-inside-work-tree >/dev/null 2>&1 || remote_fail 'App is not a
 git diff --quiet && git diff --cached --quiet || remote_fail 'Server checkout has tracked local changes. Refusing to overwrite them.'
 
 remote_step 'Preparing the production branch'
-git fetch origin prod
+git fetch "$GITHUB_READ_URL" refs/heads/prod:refs/remotes/origin/prod
 if [[ "$(git branch --show-current)" != "prod" ]]; then
     if git show-ref --verify --quiet refs/heads/prod; then
         git switch prod

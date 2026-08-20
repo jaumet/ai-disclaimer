@@ -39,6 +39,7 @@ Defaults:
 - Virtualenv: `/server/ai.selectora.cc/prod/venv`
 - Restart: `systemctl restart ai-selectora.service`
 - Optional environment file: `/server/ai.selectora.cc/prod/.env`
+- Production fetch: public read-only HTTPS from `https://github.com/jaumet/ai-disclaimer.git`
 
 Override any of these with `DEPLOY_HOST`, `DEPLOY_REMOTE_APP`, `DEPLOY_REMOTE_DATA`, `DEPLOY_REMOTE_VENV`, or `DEPLOY_REMOTE_ENV`.
 
@@ -54,4 +55,6 @@ Safety checks intentionally stop the deployment when:
 - the deployed revision does not exactly match the promoted commit.
 
 Before the first deployment, configure SSH access, ensure the server checkout tracks `origin/prod`, and set the real restart command. SQLite is backed up into `prod/data/backups/` before migrations.
+
+The local machine pushes to GitHub using its configured SSH credentials. The production server never needs a GitHub password or private key: it fetches the public `prod` branch over read-only HTTPS.
 # ai-disclaimer
