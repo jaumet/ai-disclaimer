@@ -75,8 +75,11 @@ git push origin dev:prod
 readonly RELEASE_REV="$(git rev-parse HEAD)"
 step "Deploying $RELEASE_REV to $DEPLOY_HOST"
 
-ssh "$DEPLOY_HOST" bash -s -- \
-    "$REMOTE_APP" "$REMOTE_DATA" "$REMOTE_VENV" "$REMOTE_ENV" "$RESTART_CMD" "$RELEASE_REV" "$GITHUB_READ_URL" <<'REMOTE_SCRIPT'
+printf -v REMOTE_COMMAND 'bash -s -- %q %q %q %q %q %q %q' \
+    "$REMOTE_APP" "$REMOTE_DATA" "$REMOTE_VENV" "$REMOTE_ENV" "$RESTART_CMD" "$RELEASE_REV" "$GITHUB_READ_URL"
+readonly REMOTE_COMMAND
+
+ssh "$DEPLOY_HOST" "$REMOTE_COMMAND" <<'REMOTE_SCRIPT'
 set -Eeuo pipefail
 
 readonly APP_DIR="$1"
