@@ -7,7 +7,7 @@ set -Eeuo pipefail
 
 readonly EXPECTED_BRANCH="dev"
 readonly EXPECTED_REPOSITORY="jaumet/ai-disclaimer"
-readonly DEPLOY_HOST="${DEPLOY_HOST:-root@ubuntu-s-1vcpu-512mb-10gb-fra1-01}"
+readonly DEPLOY_HOST="${DEPLOY_HOST:-phab}"
 readonly REMOTE_APP="${DEPLOY_REMOTE_APP:-/server/ai.selectora.cc/prod/app}"
 readonly REMOTE_DATA="${DEPLOY_REMOTE_DATA:-/server/ai.selectora.cc/prod/data}"
 readonly REMOTE_VENV="${DEPLOY_REMOTE_VENV:-/server/ai.selectora.cc/prod/venv}"
