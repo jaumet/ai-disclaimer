@@ -112,7 +112,9 @@ if [[ "$(git branch --show-current)" != "prod" ]]; then
     if git show-ref --verify --quiet refs/heads/prod; then
         git switch prod
     else
-        git switch --track -c prod origin/prod
+        # The ref is fetched through an explicit read-only HTTPS URL, so Git
+        # does not classify it as a trackable branch of the configured origin.
+        git switch --no-track -c prod origin/prod
     fi
 fi
 [[ "$(git branch --show-current)" == "prod" ]] || remote_fail "Could not switch the server checkout to 'prod'."

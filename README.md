@@ -54,7 +54,7 @@ Safety checks intentionally stop the deployment when:
 - the production virtualenv or expected directories are missing;
 - the deployed revision does not exactly match the promoted commit.
 
-Before the first deployment, configure SSH access, ensure the server checkout tracks `origin/prod`, and set the real restart command. SQLite is backed up into `prod/data/backups/` before migrations.
+Before the first deployment, configure SSH access and the restart command. The script creates the server's local `prod` branch from the explicitly fetched HTTPS ref when needed; no GitHub credentials or tracking upstream are required there. SQLite is backed up into `prod/data/backups/` before migrations.
 
 The local machine pushes to GitHub using its configured SSH credentials. The production server never needs a GitHub password or private key: it fetches the public `prod` branch over read-only HTTPS.
 # ai-disclaimer
