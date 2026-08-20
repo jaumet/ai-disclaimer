@@ -83,6 +83,16 @@ ${imageHtml}
     <a href="${disclosureUrl}" target="aiud_disclosure">View registered disclosure →</a>
   </div>
 </div>`;
+    const demoDialog = projectTools.querySelector("[data-embed-demo]");
+    const demoFrame = projectTools.querySelector("[data-embed-demo-frame]");
+    projectTools.querySelector("[data-preview-project-embed]").addEventListener("click", () => {
+      demoFrame.srcdoc = `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html,body{min-height:100%;margin:0}body{display:flex;align-items:flex-end;justify-content:center;padding:230px 24px 45px;box-sizing:border-box;background:#f7f5ef}</style></head><body>${embed.value}</body></html>`;
+      demoDialog.showModal();
+    });
+    projectTools.querySelector("[data-close-embed-demo]").addEventListener("click", () => demoDialog.close());
+    demoDialog.addEventListener("click", event => {
+      if (event.target === demoDialog) demoDialog.close();
+    });
     projectTools.querySelector("[data-copy-project-embed]").addEventListener("click", async () => {
       try { await navigator.clipboard.writeText(embed.value); } catch (_) { embed.select(); document.execCommand("copy"); }
       projectTools.querySelector("[data-project-copy-status]").textContent = "Copied.";
