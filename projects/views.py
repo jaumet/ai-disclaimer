@@ -139,3 +139,10 @@ def project_detail(request, pk):
     if not project.is_public and project.owner != request.user:
         raise Http404
     return render(request, "projects/project_detail.html", {"project": project})
+
+
+def project_disclosure(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    if not project.is_public and project.owner != request.user:
+        raise Http404
+    return render(request, "projects/disclosure_popup.html", {"project": project})

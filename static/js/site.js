@@ -4,13 +4,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const title = projectTools.dataset.projectTitle;
     const projectUrl = projectTools.dataset.projectUrl;
     const badgeElements = [...projectTools.querySelectorAll("[data-certificate-badge]")];
+    const officialLogoElement = projectTools.querySelector(".official-certificate-logo img");
     const escapeMarkup = value => value.replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[char]);
     const slug = (title || "ai-use-declared-certificate").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "ai-use-declared-certificate";
     const loadImage = src => new Promise((resolve, reject) => {
       const image = new Image(); image.onload = () => resolve(image); image.onerror = reject; image.src = src;
     });
     async function renderCertificateCanvas() {
-      const images = await Promise.all(badgeElements.map(element => loadImage(element.currentSrc || element.src)));
+      const [officialLogo, ...images] = await Promise.all([
+        loadImage(officialLogoElement.currentSrc || officialLogoElement.src),
+        ...badgeElements.map(element => loadImage(element.currentSrc || element.src)),
+      ]);
       const width = 1200, pad = 80, gap = 22, primaryWidth = width - pad * 2, qualifierWidth = (primaryWidth - gap) / 2;
       const primaryHeight = primaryWidth * images[0].naturalHeight / images[0].naturalWidth;
       const qualifierHeights = images.slice(1).map(image => qualifierWidth * image.naturalHeight / image.naturalWidth);
@@ -21,8 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const context = canvas.getContext("2d");
       context.fillStyle = "#ffffff"; context.fillRect(0, 0, canvas.width, canvas.height);
       context.strokeStyle = "#d6d6dc"; context.lineWidth = 2; context.strokeRect(18, 18, width - 36, canvas.height - 36);
-      context.fillStyle = "#0d0e37"; context.beginPath(); context.arc(pad + 18, 75, 18, 0, Math.PI * 2); context.fill();
-      context.fillStyle = "#ffffff"; context.font = "bold 14px Arial"; context.textAlign = "center"; context.fillText("ai", pad + 18, 80);
+      context.save(); context.beginPath(); context.arc(pad + 18, 75, 18, 0, Math.PI * 2); context.clip();
+      context.drawImage(officialLogo, 70, 70, 1115, 1115, pad, 57, 36, 36); context.restore();
       context.textAlign = "left"; context.fillStyle = "#0d0e37"; context.font = "bold 15px Arial"; context.fillText("AI USE: DECLARED · BY SELECTORA", pad + 52, 81);
       context.fillStyle = "#f7836a"; context.beginPath(); context.arc(width - pad - 18, 75, 18, 0, Math.PI * 2); context.fill();
       context.fillStyle = "#0d0e37"; context.font = "bold 18px Arial"; context.textAlign = "center"; context.fillText("✓", width - pad - 18, 82);
@@ -51,11 +55,34 @@ document.addEventListener("DOMContentLoaded", () => {
     projectTools.querySelector("[data-download-pdf]").addEventListener("click", () => { document.body.classList.add("printing-registered-certificate"); window.print(); });
     window.addEventListener("afterprint", () => document.body.classList.remove("printing-registered-certificate"));
     const embed = projectTools.querySelector("[data-project-embed]");
+    const disclosurePath = projectTools.dataset.disclosureUrl;
+    const disclosureUrl = `https://ai.selectora.cc${disclosurePath}`;
     const imageHtml = badgeElements.map(element => {
       const path = new URL(element.src, window.location.origin).pathname.replace(/\.(png|svg)$/i, ".svg");
-      return `  <img src="https://ai.selectora.cc${path}" alt="${element.dataset.label} disclosure badge" loading="lazy">`;
+      return `      <img src="https://ai.selectora.cc${path}" alt="${escapeMarkup(element.dataset.label)} disclosure badge" loading="lazy">`;
     }).join("\n");
-    embed.value = `<a class="ai-use-declared-registered" href="${window.location.href}">\n  <p><strong>${escapeMarkup(title)}</strong> discloses its use of AI as:</p>\n${imageHtml}\n</a>`;
+    embed.value = `<div class="aiud-widget">
+  <style>
+    .aiud-widget{position:relative;display:inline-block;font:14px/1.4 system-ui,sans-serif;color:#0d0e37}
+    .aiud-trigger{display:flex;align-items:center;gap:9px;width:max-content;max-width:100%;padding:7px 10px 7px 7px;border:1px solid #d5d5dc;border-radius:8px;background:#fff;color:#0d0e37;text-decoration:none;box-shadow:0 4px 12px #0d0e3712}
+    .aiud-logo{position:relative;width:42px;height:42px;flex:0 0 42px;overflow:hidden;border-radius:50%}.aiud-logo img{position:absolute;width:112.6%;height:112.6%;left:-6.3%;top:-6.3%;max-width:none}
+    .aiud-label{font-weight:800;letter-spacing:.03em}.aiud-label small{display:block;color:#66677d;font-size:10px;font-weight:600;letter-spacing:0}
+    .aiud-details{position:absolute;z-index:2147483647;left:0;bottom:calc(100% + 9px);visibility:hidden;opacity:0;transform:translateY(5px);width:min(370px,90vw);padding:15px;border:1px solid #d5d5dc;border-radius:11px;background:#fff;box-shadow:0 18px 45px #0d0e3728;transition:.18s ease;pointer-events:none}
+    .aiud-widget:hover .aiud-details,.aiud-widget:focus-within .aiud-details{visibility:visible;opacity:1;transform:none;pointer-events:auto}
+    .aiud-details p{margin:0 0 10px}.aiud-badges{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.aiud-badges img{display:block;width:100%;height:auto;border-radius:5px}.aiud-badges img:first-child{grid-column:1/-1}.aiud-details>a{display:inline-block;margin-top:10px;color:#0d0e37;font-weight:750;text-underline-offset:3px}
+  </style>
+  <a class="aiud-trigger" href="${disclosureUrl}" target="aiud_disclosure" aria-describedby="aiud-details-${slug}" onclick="window.open(this.href,'aiud_disclosure','popup=yes,width=680,height=760,resizable=yes,scrollbars=yes');return false;">
+    <span class="aiud-logo"><img src="https://ai.selectora.cc/static/images/ai-use-declared-logo.png" alt=""></span>
+    <span class="aiud-label">AI USE: DECLARED<small>Hover to see how AI was used</small></span>
+  </a>
+  <div class="aiud-details" id="aiud-details-${slug}" role="tooltip">
+    <p><strong>${escapeMarkup(title)}</strong><br>This project discloses its use of AI as:</p>
+    <div class="aiud-badges">
+${imageHtml}
+    </div>
+    <a href="${disclosureUrl}" target="aiud_disclosure">View registered disclosure →</a>
+  </div>
+</div>`;
     projectTools.querySelector("[data-copy-project-embed]").addEventListener("click", async () => {
       try { await navigator.clipboard.writeText(embed.value); } catch (_) { embed.select(); document.execCommand("copy"); }
       projectTools.querySelector("[data-project-copy-status]").textContent = "Copied.";

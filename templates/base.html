@@ -15,7 +15,7 @@
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <a class="brand" href="{% url 'home' %}" aria-label="AI Use: Declared by Selectora home">
-      <span class="brand-mark" aria-hidden="true">ai</span><span class="brand-copy"><strong>AI USE: DECLARED</strong><small>by Selectora</small></span>
+      <span class="official-logo" aria-hidden="true"><img src="{% static 'images/ai-use-declared-logo.png' %}" alt=""></span><span class="brand-copy"><strong>AI USE: DECLARED</strong><small>by Selectora</small></span>
     </a>
     <nav aria-label="Main navigation">
       <a href="{% url 'project_list' %}">Declared projects</a>
@@ -33,7 +33,7 @@
   {% if messages %}<div class="messages" role="status">{% for message in messages %}<div>{{ message }}</div>{% endfor %}</div>{% endif %}
   <main id="main">{% block content %}{% endblock %}</main>
   <footer>
-    <a class="brand brand-light" href="{% url 'home' %}"><span class="brand-mark">ai</span><span class="brand-copy"><strong>AI USE: DECLARED</strong><small>by Selectora</small></span></a>
+    <a class="brand brand-light" href="{% url 'home' %}"><span class="official-logo footer-logo" aria-hidden="true"><img src="{% static 'images/ai-use-declared-logo.png' %}" alt=""></span><span class="brand-copy"><strong>AI USE: DECLARED</strong><small>by Selectora</small></span></a>
     <p><a href="{% url 'project_list' %}">Declared projects</a> · <a href="{% url 'badge_guide' %}">Badge guide</a></p>
     <p class="footer-note"><a href="{% url 'transparency_pledge' %}">Transparency Pledge</a><br>Show how AI was used.</p>
   </footer>

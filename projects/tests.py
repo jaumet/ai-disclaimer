@@ -63,10 +63,15 @@ class ProjectTests(TestCase):
     def test_certificate_tools_are_only_visible_to_owner(self):
         project = Project.objects.create(owner=self.user, title="Public", url="https://example.com",
                                          description="Public project", primary_badge="ai-assisted", is_public=True)
+        disclosure_url = reverse("project_disclosure", args=[project.pk])
+        disclosure = self.client.get(disclosure_url)
+        self.assertContains(disclosure, "This project discloses its use of AI as")
+        self.assertContains(disclosure, "AI-ASSISTED")
         self.client.logout()
         response = self.client.get(project.get_absolute_url())
         self.assertNotContains(response, "OWNER TOOLS")
         self.assertNotContains(response, "Download PNG")
+        self.assertEqual(self.client.get(disclosure_url).status_code, 200)
 
     def test_registration_form_renders_all_badges(self):
         response = self.client.get(reverse("project_create"))
