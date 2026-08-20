@@ -39,25 +39,32 @@
     <a class="brand" href="{% url 'home' %}" aria-label="AI Use: Declared by Selectora home">
       <span class="official-logo" aria-hidden="true"><img src="{% static 'images/ai-use-declared-logo.png' %}" alt=""></span><span class="brand-copy"><strong>AI USE: DECLARED</strong><small>by Selectora</small></span>
     </a>
-    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation"><span aria-hidden="true"></span><span class="menu-toggle-label">Menu</span></button>
-    <nav id="main-navigation" aria-label="Main navigation">
+    <nav id="main-navigation" class="desktop-navigation" aria-label="Main navigation">
       <a href="{% url 'project_list' %}">Declared projects</a>
       <a href="{% url 'badge_guide' %}">The badges</a>
-      <a href="{% url 'certificate_maker' %}">Create a certificate</a>
+      <a href="{% url 'project_create' %}">Declare a project</a>
       {% if user.is_authenticated %}
         <a href="{% url 'dashboard' %}">My projects</a>
         <form method="post" action="{% url 'sign_out' %}">{% csrf_token %}<button class="nav-button">Sign out</button></form>
       {% else %}
         <a href="{% url 'request_magic_link' %}">Sign in</a>
       {% endif %}
-      <a class="button button-small" href="{% url 'project_create' %}">Register a project <span aria-hidden="true">↗</span></a>
+      <a class="button button-small" href="{% url 'join_initiative' %}">Join the campaign <span aria-hidden="true">↗</span></a>
     </nav>
+    <details class="mobile-navigation">
+      <summary aria-label="Open navigation menu"><span aria-hidden="true"></span></summary>
+      <nav aria-label="Mobile navigation">
+        <a class="campaign-nav-link" href="{% url 'join_initiative' %}">Join the campaign <span>→</span></a>
+        <a href="{% url 'project_list' %}">Declared projects</a><a href="{% url 'badge_guide' %}">The badges</a><a href="{% url 'project_create' %}">Declare a project</a>
+        {% if user.is_authenticated %}<a href="{% url 'dashboard' %}">My projects</a><form method="post" action="{% url 'sign_out' %}">{% csrf_token %}<button class="nav-button">Sign out</button></form>{% else %}<a href="{% url 'request_magic_link' %}">Sign in</a>{% endif %}
+      </nav>
+    </details>
   </header>
   {% if messages %}<div class="messages" role="status">{% for message in messages %}<div>{{ message }}</div>{% endfor %}</div>{% endif %}
   <main id="main">{% block content %}{% endblock %}</main>
   <aside class="initiative-band" aria-label="About the initiative">
-    <p><strong>This is a Nu a l’Art initiative.</strong> The project grows through the support of people and organisations that believe in transparent AI use.</p>
-    <a class="initiative-join" href="{% url 'join_initiative' %}">Join AI USE: DECLARED <small>Add your name to the initiative →</small></a>
+    <p><strong>AI USE: DECLARATION is a Nu a l’Art initiative.</strong> The campaign grows through people and organisations that believe in transparent AI use.</p>
+    <a class="initiative-join" href="{% url 'join_initiative' %}">Join AI USE: DECLARATION <small>Add your name to the campaign →</small></a>
   </aside>
   <footer>
     <a class="brand brand-light" href="{% url 'home' %}"><span class="official-logo footer-logo" aria-hidden="true"><img src="{% static 'images/ai-use-declared-logo.png' %}" alt=""></span><span class="brand-copy"><strong>AI USE: DECLARED</strong><small>by Selectora</small></span></a>

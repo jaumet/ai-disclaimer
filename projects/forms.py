@@ -11,11 +11,12 @@ class AdhesionForm(forms.ModelForm):
 
     class Meta:
         model = Adhesion
-        fields = ["full_name", "email", "supporter_type", "organization_name", "display_publicly"]
+        fields = ["full_name", "email", "supporter_type", "organization_name", "comment", "display_publicly"]
         labels = {
             "full_name": "Full name",
             "supporter_type": "I am joining as",
             "organization_name": "Organization name",
+            "comment": "Comment",
             "display_publicly": "Show my name in the public list of supporters",
         }
         widgets = {
@@ -23,6 +24,7 @@ class AdhesionForm(forms.ModelForm):
             "email": forms.EmailInput(attrs={"autocomplete": "email", "placeholder": "you@example.com"}),
             "supporter_type": forms.RadioSelect,
             "organization_name": forms.TextInput(attrs={"autocomplete": "organization", "placeholder": "Only if applicable"}),
+            "comment": forms.Textarea(attrs={"rows": 3, "placeholder": "Why do you support the campaign? (optional)"}),
         }
 
     def clean_email(self):

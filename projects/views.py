@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login, logout
@@ -10,8 +12,15 @@ from .forms import AdhesionForm, MagicCodeForm, MagicLinkForm, ProjectForm
 from .models import Adhesion, MagicLink, PLEDGE_VERSION, PledgeAcceptance, Project
 
 
+CAMPAIGN_STARTED_ON = date(2026, 8, 21)
+
+
 def home(request):
-    return render(request, "projects/home.html", {"projects": Project.objects.filter(is_public=True)[:9]})
+    return render(request, "projects/home.html", {
+        "projects": Project.objects.filter(is_public=True)[:9],
+        "adhesion_count": Adhesion.objects.count(),
+        "campaign_started_on": CAMPAIGN_STARTED_ON,
+    })
 
 
 def project_list(request):
@@ -41,13 +50,16 @@ def join_initiative(request):
         form = AdhesionForm()
     adhesions = Adhesion.objects.all()
     count = adhesions.count()
+    public_adhesions = adhesions.filter(display_publicly=True)
     return render(request, "projects/adhesions.html", {
         "form": form,
         "joined": joined,
         "adhesion_count": count,
         "launch_target": 100,
         "progress_percent": min(count, 100),
-        "public_adhesions": adhesions.filter(display_publicly=True),
+        "campaign_started_on": CAMPAIGN_STARTED_ON,
+        "public_organizations": public_adhesions.filter(supporter_type="organization"),
+        "public_people": public_adhesions.filter(supporter_type="person"),
         "pledge_version": PLEDGE_VERSION,
     })
 

@@ -1,17 +1,17 @@
 {% extends "base.html" %}{% load static %}
-{% block title %}Join the initiative — AI USE: DECLARED{% endblock %}
-{% block meta_description %}Join AI USE: DECLARED and add your support to a transparent culture around the use of AI.{% endblock %}
+{% block title %}Join AI USE: DECLARATION — the support campaign{% endblock %}
+{% block meta_description %}Join the AI USE: DECLARATION campaign and add your support to a transparent culture around the use of AI.{% endblock %}
 {% block content %}
 <section class="adhesion-hero">
   <div>
-    <p class="eyebrow"><span></span> A NU A L’ART INITIATIVE</p>
+    <p class="eyebrow"><span></span> AI USE: DECLARATION · A NU A L’ART CAMPAIGN</p>
     <h1>Add your name.<br><em>Make openness visible.</em></h1>
     <p>AI USE: DECLARED grows through people and organisations that believe audiences deserve to know how AI was used. Joining is free and does not require an account.</p>
   </div>
   <div class="campaign-progress" aria-label="{{ adhesion_count }} of {{ launch_target }} founding supporters">
     <strong>{{ adhesion_count }}</strong><span>of {{ launch_target }} founding supporters</span>
     <div><i style="width:{{ progress_percent }}%"></i></div>
-    <small>First public launch milestone · The next milestone is 500.</small>
+    <small>Campaign started {{ campaign_started_on|date:"F j, Y" }} · First launch milestone: {{ launch_target }} · Next milestone: 500.</small>
   </div>
 </section>
 
@@ -28,20 +28,24 @@
         <div class="field"><label for="{{ form.email.id_for_label }}">Email <span>Never shown publicly</span></label>{{ form.email }}{{ form.email.errors }}</div>
         <fieldset><legend>I am joining as</legend>{{ form.supporter_type }}{{ form.supporter_type.errors }}</fieldset>
         <div class="field organization-field"><label for="{{ form.organization_name.id_for_label }}">Organization name <span>If applicable</span></label>{{ form.organization_name }}{{ form.organization_name.errors }}</div>
+        <div class="field"><label for="{{ form.comment.id_for_label }}">Comment <span>Optional · Admin only</span></label>{{ form.comment }}{{ form.comment.errors }}<small>Tell us briefly why you support the campaign. Comments are not published automatically.</small></div>
         <label class="simple-check">{{ form.display_publicly }} <span>Show my name in the public list of supporters</span></label>
         <div class="adhesion-pledge">
           <div><strong>The Transparency Pledge</strong><p>Joining means committing to truthful, clear and responsible disclosure.</p><a href="{% url 'transparency_pledge' %}" target="_blank">Read the pledge ↗</a></div>
           <audio controls preload="metadata" src="{% static 'audio/transparency-pledge-en.mp3' %}">Your browser does not support audio playback.</audio>
         </div>
         <label class="simple-check pledge-required">{{ form.accept_pledge }} <span>I have read or listened to and accept the <a href="{% url 'transparency_pledge' %}" target="_blank">Transparency Pledge</a>.</span></label>{{ form.accept_pledge.errors }}
-        <button class="button" type="submit">Add my adhesion <span>→</span></button>
-        <p class="privacy-note">No account required. Your email is used only to manage this adhesion.</p>
+        <button class="button" type="submit">Add my support <span>→</span></button>
+        <p class="privacy-note">No account required. Your email is used only to manage your support.</p>
       </form>
     {% endif %}
   </div>
-  <aside class="supporter-list">
-    <p class="eyebrow"><span></span> PUBLIC ADHESIONS</p><h2>People making the commitment visible.</h2>
-    {% if public_adhesions %}<ol>{% for adhesion in public_adhesions %}<li><span>{{ forloop.counter|stringformat:"02d" }}</span><strong>{{ adhesion.public_label }}</strong><small>{{ adhesion.get_supporter_type_display }}</small></li>{% endfor %}</ol>{% else %}<p class="empty-supporters">The first names will appear here. You can be one of them.</p>{% endif %}
-  </aside>
+</section>
+<section class="supporters-section" id="public-adhesions">
+  <header><p class="eyebrow"><span></span> PUBLIC SUPPORTERS · {{ adhesion_count }} TOTAL</p><h2>The public list of supporters.</h2><p>Organisations appear first, followed by individual supporters. Only supporters who explicitly chose to be public are shown.</p></header>
+  <div class="supporter-groups">
+    <section class="supporter-list"><h3>Organizations</h3>{% if public_organizations %}<ol>{% for adhesion in public_organizations %}<li><span>{{ forloop.counter|stringformat:"02d" }}</span><strong>{{ adhesion.public_label }}</strong><small>Organization</small></li>{% endfor %}</ol>{% else %}<p class="empty-supporters">The first public organization will appear here.</p>{% endif %}</section>
+    <section class="supporter-list"><h3>People</h3>{% if public_people %}<ol>{% for adhesion in public_people %}<li><span>{{ forloop.counter|stringformat:"02d" }}</span><strong>{{ adhesion.public_label }}</strong><small>Individual supporter</small></li>{% endfor %}</ol>{% else %}<p class="empty-supporters">The first public individual supporters will appear here.</p>{% endif %}</section>
+  </div>
 </section>
 {% endblock %}

@@ -1,26 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const menuToggle = document.querySelector(".menu-toggle");
-  const mainNavigation = document.querySelector("#main-navigation");
-  if (menuToggle && mainNavigation) {
-    const closeMenu = () => {
-      mainNavigation.classList.remove("is-open");
-      menuToggle.setAttribute("aria-expanded", "false");
-    };
-    menuToggle.addEventListener("click", () => {
-      const open = !mainNavigation.classList.contains("is-open");
-      mainNavigation.classList.toggle("is-open", open);
-      menuToggle.setAttribute("aria-expanded", String(open));
-    });
-    mainNavigation.addEventListener("click", event => {
-      if (event.target.closest("a")) closeMenu();
-    });
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape") { closeMenu(); menuToggle.focus(); }
-    });
-    document.addEventListener("click", event => {
-      if (!mainNavigation.contains(event.target) && !menuToggle.contains(event.target)) closeMenu();
-    });
-  }
   document.querySelectorAll("[data-card-editor]").forEach(editor => {
     const scope = editor.closest("[data-certificate-maker], [data-project-tools]");
     const preview = scope?.querySelector("[data-card-preview]");
@@ -59,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const badgeElements = [...projectTools.querySelectorAll("[data-certificate-badge]")];
     const officialLogoElement = projectTools.querySelector(".official-certificate-logo img");
     const escapeMarkup = value => value.replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[char]);
-    const slug = (title || "ai-use-declared-certificate").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "ai-use-declared-certificate";
+    const slug = (title || "ai-use-declared-card").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "ai-use-declared-card";
     const loadImage = src => new Promise((resolve, reject) => {
       const image = new Image(); image.onload = () => resolve(image); image.onerror = reject; image.src = src;
     });
@@ -108,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
     projectTools.querySelector("[data-download-png]").addEventListener("click", async () => download((await renderCertificateCanvas()).toDataURL("image/png"), `${slug}-ai-use-declared.png`));
     projectTools.querySelector("[data-download-svg]").addEventListener("click", async () => {
       const canvas = await renderCertificateCanvas();
-      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${canvas.width} ${canvas.height}" role="img" aria-label="AI use disclosure certificate for ${escapeMarkup(title)}"><image width="${canvas.width}" height="${canvas.height}" href="${canvas.toDataURL("image/png")}"/></svg>`;
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${canvas.width} ${canvas.height}" role="img" aria-label="AI use declaration card for ${escapeMarkup(title)}"><image width="${canvas.width}" height="${canvas.height}" href="${canvas.toDataURL("image/png")}"/></svg>`;
       download(URL.createObjectURL(new Blob([svg], {type: "image/svg+xml"})), `${slug}-ai-use-declared.svg`);
     });
     projectTools.querySelector("[data-download-pdf]").addEventListener("click", () => { document.body.classList.add("printing-registered-certificate"); window.print(); });

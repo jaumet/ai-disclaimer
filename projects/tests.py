@@ -33,6 +33,35 @@ class AdhesionTests(TestCase):
         self.assertContains(response, "Accept the Transparency Pledge")
         self.assertFalse(Adhesion.objects.exists())
 
+    def test_campaign_lists_public_organizations_before_people(self):
+        Adhesion.objects.create(full_name="Private", email="private@example.com", display_publicly=False)
+        Adhesion.objects.create(full_name="Person", email="person@example.com", supporter_type="person")
+        Adhesion.objects.create(full_name="Org Contact", email="org@example.com", supporter_type="organization", organization_name="Open Org")
+        response = self.client.get(reverse("join_initiative"))
+        self.assertContains(response, "Campaign started")
+        self.assertContains(response, "3 TOTAL")
+        self.assertLess(response.content.index(b"Open Org"), response.content.index(b"Person"))
+        self.assertNotContains(response, ">Private<")
+
+    def test_comment_is_saved_and_suspicious_wording_is_flagged(self):
+        response = self.client.post(reverse("join_initiative"), {
+            "full_name": "Concerned Maker", "email": "comment@example.com",
+            "supporter_type": "person", "comment": "This is fucking spam", "accept_pledge": "on",
+        })
+        self.assertEqual(response.status_code, 200)
+        adhesion = Adhesion.objects.get()
+        self.assertEqual(adhesion.comment, "This is fucking spam")
+        self.assertEqual(adhesion.comment_status, "needs_review")
+        self.assertEqual(adhesion.comment_review_reason, "Potentially offensive wording")
+
+    def test_normal_comment_is_marked_ok(self):
+        adhesion = Adhesion.objects.create(
+            full_name="Supporter", email="supporter@example.com",
+            comment="Transparent creative work deserves public support.",
+        )
+        self.assertEqual(adhesion.comment_status, "clean")
+        self.assertEqual(adhesion.comment_review_reason, "")
+
 
 class MagicLinkTests(TestCase):
     def test_magic_link_creates_user_and_signs_in_once(self):

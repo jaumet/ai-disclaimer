@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
     path("", views.home, name="home"),
     path("badges/", views.badge_guide, name="badge_guide"),
-    path("create-certificate/", views.certificate_maker, name="certificate_maker"),
+    path("create-declaration/", views.certificate_maker, name="certificate_maker"),
     path("made-openly/", views.project_list, name="project_list"),
     path("transparency-pledge/", views.transparency_pledge, name="transparency_pledge"),
     path("join/", views.join_initiative, name="join_initiative"),

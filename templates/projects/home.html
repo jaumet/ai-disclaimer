@@ -3,17 +3,13 @@
 <section class="hero">
   <div class="hero-copy">
     <p class="eyebrow"><span></span> AI USED? SAY HOW.</p>
-    <h1>AI USE:<br><em>DECLARED</em></h1>
-    <p class="hero-intro"><strong>Show how AI was used.</strong> Give your website or project one clear primary category, then add optional qualifiers that explain the details.</p>
+    <h1>AI USE<br><em>DECLARED</em></h1>
+    <p class="hero-intro"><strong>Being open about how AI was used builds trust, gives context to creative work, and makes transparency something to be proud of.</strong></p>
     <a class="hero-pledge" href="{% url 'transparency_pledge' %}"><span aria-hidden="true">✦</span><span><strong>AI USE: DECLARED Transparency Pledge</strong><small>Our commitment to truthful, responsible and verifiable disclosure.</small></span><b aria-hidden="true">Read the pledge →</b></a>
-    <div class="hero-actions">
-      <a class="button choice-button registered-choice" href="{% url 'project_create' %}"><span class="choice-icon" aria-hidden="true">✓</span><span>Register + get public verification</span></a>
-      <span class="choice-or" aria-hidden="true">OR</span>
-      <a class="button choice-button certificate-choice" href="{% url 'certificate_maker' %}"><span>Create a certificate — no account</span><span class="choice-arrow" aria-hidden="true">→</span></a>
-    </div>
+    <div class="hero-actions"><a class="button choice-button registered-choice" href="{% url 'project_create' %}"><span class="choice-icon" aria-hidden="true">✓</span><span>Declare a project</span><span class="choice-arrow" aria-hidden="true">→</span></a></div>
     <div class="classification-formula" aria-label="One primary badge plus optional qualifiers equals a clear AI disclosure"><span><strong>1</strong> PRIMARY BADGE</span><b>+</b><span>OPTIONAL QUALIFIERS</span><b>=</b><span>CLEAR DISCLOSURE</span></div>
   </div>
-  <div class="hero-visual badge-story" role="img" tabindex="0" aria-label="The twelve AI USE: DECLARED badges float into primary and qualifier columns. AI-Assisted and Human-Reviewed are selected and placed on a disclosure certificate. Hover or focus to pause the animation.">
+  <div class="hero-visual badge-story" role="img" tabindex="0" aria-label="The twelve AI USE: DECLARED badges float into primary and qualifier columns. AI-Assisted and Human-Reviewed are selected and placed on a disclosure card. Hover or focus to pause the animation.">
     <div class="story-halo" aria-hidden="true"></div>
     <div class="story-columns" aria-hidden="true"><span>PRIMARY</span><span>QUALIFIERS</span></div>
     <div class="story-badge p1"><img src="{% static 'badges/primary/01-ai-made.png' %}" alt=""></div>
@@ -41,15 +37,17 @@
   </div>
 </section>
 
+<section class="home-campaign">
+  <div><p class="eyebrow"><span></span> AI USE: DECLARATION · THE CAMPAIGN</p><h2>Make honest AI-use disclosure the norm.</h2><p>Join the AI USE: DECLARATION proposal and help build a culture where people can be honest—and still proud—when they publicly explain where and how AI was used in a project: a website, an app, software or any other creative work.</p></div>
+  <div class="home-campaign-count"><strong>{{ adhesion_count }}</strong><span>supporters since {{ campaign_started_on|date:"F j, Y" }}</span><a class="button" href="{% url 'join_initiative' %}">Join the campaign and see the list <span>→</span></a></div>
+</section>
+
 <section id="how-it-works" class="how-section home-how">
   <div class="section-heading">
-    <div><p class="eyebrow"><span></span> AI USE: DECLARED · HOW IT WORKS</p><h2>Be transparent.<br>Choose your level.</h2></div>
-    <p>The badges are free for everyone. Registration adds public recognition, trust and a permanent record that others can verify.</p>
+    <div><p class="eyebrow"><span></span> AI USE: DECLARED · HOW IT WORKS</p><h2>Declare how AI<br>was used.</h2></div>
+    <p>Each declaration belongs to a person or organisation and describes the use of AI in a specific project.</p>
   </div>
-  <div class="path-grid">
-    <article class="path-card registered-path"><span class="path-label">RECOMMENDED</span><div class="step-icon">✓</div><h3>Register and be recognised</h3><p>Create a public, persistent certificate linked to your project. Registration brings greater trust and public recognition because anyone can verify your disclosure in the <a href="{% url 'project_list' %}">AI USE: DECLARED registry</a>.</p><ul><li>Public project page</li><li>Verifiable certificate</li><li>Visible in the registry</li><li>Update your disclosure</li></ul><a class="button registered-choice" href="{% url 'project_create' %}">Register + get public verification <span>↗</span></a></article>
-    <article class="path-card open-path"><span class="path-label">NO ACCOUNT NEEDED</span><div class="step-icon">◇</div><h3>Just create the certificate</h3><p>Like Creative Commons, the badge system is open to use. Choose the badges that describe your process and create a certificate immediately—without an account or public listing.</p><ul><li>No sign-up</li><li>Immediate certificate</li><li>Same disclosure rules</li><li>No public verification page</li></ul><a class="button certificate-choice" href="{% url 'certificate_maker' %}">Create a certificate — no account <span>→</span></a></article>
-  </div>
+  <article class="path-card single-declaration-path"><div class="step-icon">✓</div><h3>Create a public project declaration</h3><p>Select the badges that describe where and how AI contributed. The declaration is linked to the project, appears in the public registry and can be updated when the process changes.</p><ul><li>A declaration for one specific project</li><li>Public and shareable record</li><li>Downloadable declaration card</li><li>HTML embed for the project website</li></ul><a class="button registered-choice" href="{% url 'project_create' %}">Declare a project <span>→</span></a></article>
 </section>
 
 <section class="home-badges">
@@ -70,5 +68,5 @@
   <div class="project-grid">{% for project in projects %}{% include "projects/project_card.html" %}{% endfor %}</div>
 </section>{% endif %}
 
-<section class="cta-band"><div><p class="eyebrow light"><span></span> YOUR WORK. YOUR PROCESS.</p><h2>Ready to make it clear?</h2></div><a class="button button-light" href="{% url 'project_create' %}">Register a project <span>↗</span></a></section>
+<section class="cta-band"><div><p class="eyebrow light"><span></span> YOUR WORK. YOUR PROCESS.</p><h2>Ready to make it clear?</h2></div><a class="button button-light" href="{% url 'project_create' %}">Declare a project <span>→</span></a></section>
 {% endblock %}
