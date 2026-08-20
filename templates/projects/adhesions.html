@@ -1,0 +1,47 @@
+{% extends "base.html" %}{% load static %}
+{% block title %}Join the initiative — AI USE: DECLARED{% endblock %}
+{% block meta_description %}Join AI USE: DECLARED and add your support to a transparent culture around the use of AI.{% endblock %}
+{% block content %}
+<section class="adhesion-hero">
+  <div>
+    <p class="eyebrow"><span></span> A NU A L’ART INITIATIVE</p>
+    <h1>Add your name.<br><em>Make openness visible.</em></h1>
+    <p>AI USE: DECLARED grows through people and organisations that believe audiences deserve to know how AI was used. Joining is free and does not require an account.</p>
+  </div>
+  <div class="campaign-progress" aria-label="{{ adhesion_count }} of {{ launch_target }} founding supporters">
+    <strong>{{ adhesion_count }}</strong><span>of {{ launch_target }} founding supporters</span>
+    <div><i style="width:{{ progress_percent }}%"></i></div>
+    <small>First public launch milestone · The next milestone is 500.</small>
+  </div>
+</section>
+
+<section class="adhesion-content">
+  <div class="adhesion-form-card">
+    {% if joined %}
+      <div class="adhesion-thanks"><span>✓</span><h2>You’re part of it.</h2><p>Thank you for supporting truthful and visible AI disclosure.</p>{% if not user.is_authenticated %}<aside><strong>Want to register projects too?</strong><p>An account is entirely optional. It lets you publish verifiable project disclosures.</p><a class="text-link" href="{% url 'request_magic_link' %}">Create or access an account →</a></aside>{% endif %}</div>
+    {% else %}
+      <p class="eyebrow"><span></span> JOIN IN UNDER A MINUTE</p>
+      <h2>Support the initiative.</h2>
+      <form method="post" class="adhesion-form">{% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="field"><label for="{{ form.full_name.id_for_label }}">Full name</label>{{ form.full_name }}{{ form.full_name.errors }}</div>
+        <div class="field"><label for="{{ form.email.id_for_label }}">Email <span>Never shown publicly</span></label>{{ form.email }}{{ form.email.errors }}</div>
+        <fieldset><legend>I am joining as</legend>{{ form.supporter_type }}{{ form.supporter_type.errors }}</fieldset>
+        <div class="field organization-field"><label for="{{ form.organization_name.id_for_label }}">Organization name <span>If applicable</span></label>{{ form.organization_name }}{{ form.organization_name.errors }}</div>
+        <label class="simple-check">{{ form.display_publicly }} <span>Show my name in the public list of supporters</span></label>
+        <div class="adhesion-pledge">
+          <div><strong>The Transparency Pledge</strong><p>Joining means committing to truthful, clear and responsible disclosure.</p><a href="{% url 'transparency_pledge' %}" target="_blank">Read the pledge ↗</a></div>
+          <audio controls preload="metadata" src="{% static 'audio/transparency-pledge-en.mp3' %}">Your browser does not support audio playback.</audio>
+        </div>
+        <label class="simple-check pledge-required">{{ form.accept_pledge }} <span>I have read or listened to and accept the <a href="{% url 'transparency_pledge' %}" target="_blank">Transparency Pledge</a>.</span></label>{{ form.accept_pledge.errors }}
+        <button class="button" type="submit">Add my adhesion <span>→</span></button>
+        <p class="privacy-note">No account required. Your email is used only to manage this adhesion.</p>
+      </form>
+    {% endif %}
+  </div>
+  <aside class="supporter-list">
+    <p class="eyebrow"><span></span> PUBLIC ADHESIONS</p><h2>People making the commitment visible.</h2>
+    {% if public_adhesions %}<ol>{% for adhesion in public_adhesions %}<li><span>{{ forloop.counter|stringformat:"02d" }}</span><strong>{{ adhesion.public_label }}</strong><small>{{ adhesion.get_supporter_type_display }}</small></li>{% endfor %}</ol>{% else %}<p class="empty-supporters">The first names will appear here. You can be one of them.</p>{% endif %}
+  </aside>
+</section>
+{% endblock %}

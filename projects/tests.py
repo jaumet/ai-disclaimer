@@ -6,7 +6,32 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from .forms import ProjectForm
-from .models import PledgeAcceptance, Project
+from .models import Adhesion, PledgeAcceptance, Project
+
+
+class AdhesionTests(TestCase):
+    def test_joining_needs_no_account_and_accepts_pledge(self):
+        response = self.client.post(reverse("join_initiative"), {
+            "full_name": "Open Maker",
+            "email": "Maker@Example.com",
+            "supporter_type": "person",
+            "display_publicly": "on",
+            "accept_pledge": "on",
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "You’re part of it")
+        adhesion = Adhesion.objects.get()
+        self.assertEqual(adhesion.email, "maker@example.com")
+        self.assertEqual(adhesion.pledge_version, "1.0")
+        self.assertEqual(get_user_model().objects.count(), 0)
+
+    def test_pledge_and_organization_name_are_required(self):
+        response = self.client.post(reverse("join_initiative"), {
+            "full_name": "Open Org", "email": "org@example.com", "supporter_type": "organization",
+        })
+        self.assertContains(response, "Enter the organization")
+        self.assertContains(response, "Accept the Transparency Pledge")
+        self.assertFalse(Adhesion.objects.exists())
 
 
 class MagicLinkTests(TestCase):

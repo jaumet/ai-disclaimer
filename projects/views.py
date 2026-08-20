@@ -6,8 +6,8 @@ from django.core.mail import send_mail
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import MagicCodeForm, MagicLinkForm, ProjectForm
-from .models import MagicLink, PLEDGE_VERSION, PledgeAcceptance, Project
+from .forms import AdhesionForm, MagicCodeForm, MagicLinkForm, ProjectForm
+from .models import Adhesion, MagicLink, PLEDGE_VERSION, PledgeAcceptance, Project
 
 
 def home(request):
@@ -28,6 +28,28 @@ def certificate_maker(request):
 
 def transparency_pledge(request):
     return render(request, "projects/pledge.html", {"pledge_version": PLEDGE_VERSION})
+
+
+def join_initiative(request):
+    form = AdhesionForm(request.POST or None)
+    joined = False
+    if request.method == "POST" and form.is_valid():
+        adhesion = form.save(commit=False)
+        adhesion.pledge_version = PLEDGE_VERSION
+        adhesion.save()
+        joined = True
+        form = AdhesionForm()
+    adhesions = Adhesion.objects.all()
+    count = adhesions.count()
+    return render(request, "projects/adhesions.html", {
+        "form": form,
+        "joined": joined,
+        "adhesion_count": count,
+        "launch_target": 100,
+        "progress_percent": min(count, 100),
+        "public_adhesions": adhesions.filter(display_publicly=True),
+        "pledge_version": PLEDGE_VERSION,
+    })
 
 
 def _is_local_request(request):

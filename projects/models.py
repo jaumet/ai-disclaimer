@@ -30,6 +30,28 @@ QUALIFIER_BADGES = [
 PLEDGE_VERSION = "1.0"
 
 
+class Adhesion(models.Model):
+    SUPPORTER_TYPES = [("person", "A person"), ("organization", "An organization")]
+
+    full_name = models.CharField(max_length=120)
+    email = models.EmailField(unique=True)
+    supporter_type = models.CharField(max_length=20, choices=SUPPORTER_TYPES, default="person")
+    organization_name = models.CharField(max_length=160, blank=True)
+    display_publicly = models.BooleanField(default=True)
+    pledge_version = models.CharField(max_length=20, default=PLEDGE_VERSION)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_at"]
+
+    def __str__(self):
+        return self.organization_name or self.full_name
+
+    @property
+    def public_label(self):
+        return self.organization_name or self.full_name
+
+
 class PledgeAcceptance(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="pledge_acceptances")
     version = models.CharField(max_length=20, default=PLEDGE_VERSION)
