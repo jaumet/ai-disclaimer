@@ -1,12 +1,8 @@
-import re
-
 from django.contrib.auth import get_user_model
-from django.core import mail
-from django.test import TestCase, override_settings
+from django.test import TestCase
 from django.urls import reverse
 
-from .forms import ProjectForm
-from .models import Adhesion, PledgeAcceptance, Project
+from .models import Adhesion
 
 
 class AdhesionTests(TestCase):
@@ -38,160 +34,81 @@ class AdhesionTests(TestCase):
         Adhesion.objects.create(full_name="Person", email="person@example.com", supporter_type="person")
         Adhesion.objects.create(full_name="Org Contact", email="org@example.com", supporter_type="organization", organization_name="Open Org")
         response = self.client.get(reverse("join_initiative"))
-        self.assertContains(response, "Campaign started")
         self.assertContains(response, "3 TOTAL")
+        self.assertNotContains(response, "founding supporters")
+        self.assertNotContains(response, "Campaign started")
         self.assertLess(response.content.index(b"Open Org"), response.content.index(b"Person"))
         self.assertNotContains(response, ">Private<")
 
-    def test_comment_is_saved_and_suspicious_wording_is_flagged(self):
-        response = self.client.post(reverse("join_initiative"), {
-            "full_name": "Concerned Maker", "email": "comment@example.com",
-            "supporter_type": "person", "comment": "This is fucking spam", "accept_pledge": "on",
-        })
-        self.assertEqual(response.status_code, 200)
+    def test_campaign_milestones_appear_from_one_hundred_supporters(self):
+        Adhesion.objects.bulk_create([
+            Adhesion(full_name=f"Supporter {number}", email=f"supporter{number}@example.com")
+            for number in range(100)
+        ])
+        response = self.client.get(reverse("join_initiative"))
+        self.assertContains(response, "of 100 founding supporters")
+        self.assertContains(response, "Campaign started August 21, 2026")
+
+    def test_suspicious_comment_is_flagged(self):
+        Adhesion.objects.create(
+            full_name="Concerned Maker", email="comment@example.com", comment="This is fucking spam"
+        )
         adhesion = Adhesion.objects.get()
-        self.assertEqual(adhesion.comment, "This is fucking spam")
         self.assertEqual(adhesion.comment_status, "needs_review")
         self.assertEqual(adhesion.comment_review_reason, "Potentially offensive wording")
 
-    def test_normal_comment_is_marked_ok(self):
-        adhesion = Adhesion.objects.create(
-            full_name="Supporter", email="supporter@example.com",
-            comment="Transparent creative work deserves public support.",
-        )
-        self.assertEqual(adhesion.comment_status, "clean")
-        self.assertEqual(adhesion.comment_review_reason, "")
 
-
-class MagicLinkTests(TestCase):
-    def test_magic_link_creates_user_and_signs_in_once(self):
-        response = self.client.post(reverse("request_magic_link"), {"email": "Maker@Example.com", "pledge": "on"})
-        self.assertContains(response, "Check your inbox")
-        self.assertEqual(get_user_model().objects.get().email, "maker@example.com")
-        self.assertEqual(PledgeAcceptance.objects.count(), 0)
-        url = re.search(r"http://testserver(/auth/verify/[^\s]+/)", mail.outbox[0].body).group(1)
-        response = self.client.get(url)
-        self.assertRedirects(response, reverse("dashboard"))
-        self.assertEqual(PledgeAcceptance.objects.count(), 1)
-        self.assertIn("_auth_user_id", self.client.session)
-        self.client.logout()
-        self.assertEqual(self.client.get(url).status_code, 400)
-
-    @override_settings(DEBUG=True)
-    def test_local_request_shows_code_and_accepts_it(self):
-        response = self.client.post(
-            reverse("request_magic_link"), {"email": "local@example.com", "pledge": "on"},
-            HTTP_HOST="localhost",
-        )
-        self.assertContains(response, "LOCAL ACCESS CODE")
-        code = response.context["dev_code"]
-        self.assertRegex(code, r"^\d{6}$")
-        response = self.client.post(reverse("verify_magic_code"), {"code": code}, HTTP_HOST="localhost")
-        self.assertRedirects(response, reverse("dashboard"))
-        self.assertIn("_auth_user_id", self.client.session)
-
-
-class ProjectTests(TestCase):
-    def setUp(self):
-        self.user = get_user_model().objects.create_user(username="owner@example.com", email="owner@example.com")
-        self.client.force_login(self.user)
-
-    def test_project_creation(self):
-        response = self.client.post(reverse("project_create"), {
-            "title": "Clear Project",
-            "url": "https://example.com",
-            "description": "A transparent digital project.",
-            "primary_badge": "ai-assisted",
-            "qualifiers": ["human-reviewed", "ai-generated-code"],
-            "tools_used": "Claude",
-            "process_note": "A human directed and reviewed generated code.",
-            "is_public": "on",
-        })
-        project = Project.objects.get()
-        self.assertRedirects(response, project.get_absolute_url())
-        self.assertEqual(project.qualifiers, ["human-reviewed", "ai-generated-code"])
-        response = self.client.get(project.get_absolute_url())
-        self.assertContains(response, "OWNER TOOLS")
-        self.assertContains(response, "Download PNG")
-
-    def test_certificate_tools_are_only_visible_to_owner(self):
-        project = Project.objects.create(owner=self.user, title="Public", url="https://example.com",
-                                         description="Public project", primary_badge="ai-assisted", is_public=True)
-        disclosure_url = reverse("project_disclosure", args=[project.pk])
-        disclosure = self.client.get(disclosure_url)
-        self.assertContains(disclosure, "This project discloses its use of AI as")
-        self.assertContains(disclosure, "AI-ASSISTED")
-        self.client.logout()
-        response = self.client.get(project.get_absolute_url())
-        self.assertNotContains(response, "OWNER TOOLS")
-        self.assertNotContains(response, "Download PNG")
-        self.assertEqual(self.client.get(disclosure_url).status_code, 200)
-
-    def test_registration_form_renders_all_badges(self):
-        response = self.client.get(reverse("project_create"))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "01-ai-made.png")
-        self.assertContains(response, "05-no-ai-used.png")
-        self.assertContains(response, "01-human-reviewed.png")
-        self.assertContains(response, "05-ai-generated-code.png")
-        self.assertContains(response, "06-ai-generated-video.svg")
-        self.assertContains(response, "07-ai-generated-text.svg")
-
-    def test_public_guide_registry_and_pledge_render(self):
-        self.client.logout()
-        for name in ("badge_guide", "certificate_maker", "project_list", "transparency_pledge", "site_ai_disclosure"):
+class PublicSiteTests(TestCase):
+    def test_core_pages_render_without_account_links(self):
+        for name in ("home", "badge_guide", "declaration_maker", "transparency_pledge", "site_ai_disclosure", "join_initiative"):
             response = self.client.get(reverse(name))
             self.assertEqual(response.status_code, 200)
-            self.assertContains(response, "aiud-details-ai-use-declared")
-            self.assertContains(response, "AI-use declaration for")
-            self.assertContains(response, reverse("site_ai_disclosure"))
-            self.assertNotContains(response, "688b4cbc-6bb2-47d9-9336-78cff1bfb575")
-            self.assertContains(response, "02-ai-assisted.png")
-            self.assertContains(response, "01-human-reviewed.png")
+            self.assertNotContains(response, "Sign in")
+            self.assertNotContains(response, "Register a project")
 
-        Project.objects.create(owner=self.user, title="Compact registry example", url="https://example.com", description="Public example.", primary_badge="ai-assisted", is_public=True)
-        home = self.client.get(reverse("home"))
-        self.assertContains(home, "TTS-AI-transparency-declaration.mp3")
-        self.assertNotContains(home, "CLEAR DISCLOSURE")
-        self.assertContains(home, "Beyond detection:")
-        self.assertContains(home, "eur-lex.europa.eu/eli/reg/2024/1689/oj/eng")
-        self.assertContains(home, "complements—not replaces")
-        self.assertContains(home, "View all declared projects")
-        self.assertContains(home, "recent-project-list")
-        self.assertNotContains(home, "project-grid")
-        self.assertContains(home, "Ready to publish and share")
-        self.assertContains(home, "Choose one main badge")
-        self.assertContains(home, "Add any details that apply")
-        self.assertContains(home, "06-ai-generated-video.svg")
-        self.assertContains(home, "07-ai-generated-text.svg")
-        self.assertNotContains(home, "From process to")
-        self.assertNotContains(home, "Publish and share the declaration")
-        self.assertNotContains(home, "A SHARED COMMITMENT")
-        self.assertContains(home, "<h2>The Transparency Pledge</h2>", html=True)
-        self.assertContains(home, "Explore all badges and definitions")
-        self.assertContains(home, "Support the initiative")
-        self.assertContains(home, "The Transparency Pledge")
-        self.assertContains(home, "Public record")
-        self.assertNotContains(home, "PUBLIC SIGNATURES")
-        self.assertNotContains(home, "AI users")
-        self.assertNotContains(home, "Read every definition and rule")
-        badge_guide = self.client.get(reverse("badge_guide"))
-        self.assertEqual(badge_guide.status_code, 200)
-        self.assertContains(badge_guide, "Primary badges")
-        self.assertContains(badge_guide, "Optional qualifiers")
-        pledge = self.client.get(reverse("transparency_pledge"))
-        self.assertEqual(pledge.content.count(b"<audio"), 1)
+    def test_home_centres_creation_and_support(self):
+        response = self.client.get(reverse("home"))
+        self.assertContains(response, "Choose your AI badges")
+        self.assertContains(response, "Support the initiative")
+        self.assertContains(response, "Beyond detection:")
+        self.assertNotContains(response, "Recently declared")
+        self.assertNotContains(response, "See declared projects")
+        self.assertNotContains(response, "PUBLIC REGISTRY")
+        content = response.content
+        self.assertLess(content.index(b'class="hero home-hero"'), content.index(b'id="how-it-works"'))
+        self.assertLess(content.index(b'id="how-it-works"'), content.index(b'class="support-initiative"'))
+        self.assertLess(content.index(b'class="support-initiative"'), content.index(b'class="beyond-detection'))
+        self.assertLess(content.index(b'class="beyond-detection'), content.index(b'class="home-pledge-section"'))
+        self.assertLess(content.index(b'class="home-pledge-section"'), content.index(b'class="cta-band"'))
+        self.assertEqual(content.count(b"<audio"), 1)
+        self.assertContains(response, 'class="button button-small nav-badges"')
+        self.assertContains(response, "It does not imply independent verification or certification")
+        self.assertNotContains(response, "A SHARED COMMITMENT")
 
-    def test_no_ai_rejects_ai_qualifier(self):
-        form = ProjectForm(data={
-            "title": "Human Project", "url": "https://example.com", "description": "Made by people.",
-            "primary_badge": "no-ai-used", "qualifiers": ["ai-generated-images"], "is_public": "on",
-        })
-        self.assertFalse(form.is_valid())
-        self.assertIn("can only be combined", str(form.errors))
+    def test_maker_is_anonymous_and_has_all_badges(self):
+        response = self.client.get(reverse("declaration_maker"))
+        self.assertContains(response, "Nothing is uploaded or saved")
+        self.assertNotContains(response, "Project or website name")
+        self.assertNotContains(response, "Website URL")
+        self.assertContains(response, "01-ai-made.png")
+        self.assertContains(response, "05-no-ai-used.png")
+        self.assertContains(response, "06-ai-generated-video.svg")
+        self.assertContains(response, "07-ai-generated-text.svg")
+        self.assertNotContains(response, 'data-src="/static/badges/primary/02-ai-assisted.png" checked')
+        self.assertContains(response, "Choose the main AI use")
+        self.assertContains(response, "Choose secondary uses and details")
+        self.assertContains(response, "Choose the style")
+        self.assertContains(response, "Download or embed")
+        self.assertContains(response, "Download PNG")
+        self.assertContains(response, "Download SVG")
+        self.assertContains(response, "Copy generated HTML")
 
-    def test_private_project_is_hidden_from_other_users(self):
-        project = Project.objects.create(owner=self.user, title="Private", url="https://example.com",
-                                         description="Private project", primary_badge="no-ai-used", is_public=False)
-        self.client.logout()
-        self.assertEqual(self.client.get(project.get_absolute_url()).status_code, 404)
+    def test_old_registry_and_account_urls_redirect_to_maker(self):
+        for path in ("/made-openly/", "/auth/sign-in/", "/dashboard/", "/projects/new/"):
+            response = self.client.get(path)
+            self.assertRedirects(response, reverse("declaration_maker"), status_code=301)
+
+    def test_admin_login_remains_available(self):
+        response = self.client.get("/admin/")
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/admin/login/", response.url)

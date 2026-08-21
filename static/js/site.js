@@ -154,16 +154,15 @@ ${imageHtml}
     const qualifierInputs = [...maker.querySelectorAll('input[name="maker_qualifier"]')];
     const badgeArea = maker.querySelector("[data-maker-badges]");
     const note = maker.querySelector("[data-maker-note]");
-    const titleInput = maker.querySelector("[data-maker-title]");
-    const urlInput = maker.querySelector("[data-maker-url]");
-    const certificateTitle = maker.querySelector("[data-certificate-title]");
-    const certificateUrl = maker.querySelector("[data-certificate-url]");
+    const emptyState = maker.querySelector("[data-maker-empty]");
     const embedFormat = maker.querySelector("[data-embed-format]");
     const embedCode = maker.querySelector("[data-embed-code]");
     const copyButton = maker.querySelector("[data-copy-embed]");
     const copyStatus = maker.querySelector("[data-copy-status]");
     const makerPreview = maker.querySelector("[data-maker-preview]");
+    const downloadButtons = [...maker.querySelectorAll("[data-download-pdf], [data-download-png], [data-download-svg]")];
     const escapeHtml = value => value.replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[char]);
+    const getSelected = () => [primaryInputs.find(input => input.checked), ...qualifierInputs.filter(input => input.checked)].filter(Boolean);
     function updateMaker() {
       const primary = primaryInputs.find(input => input.checked);
       const restricted = ["NO AI USED", "NO GENERATIVE AI"].includes(primary?.value);
@@ -175,7 +174,10 @@ ${imageHtml}
       });
       note.hidden = !restricted;
       badgeArea.replaceChildren();
-      const selected = [primary, ...qualifierInputs.filter(input => input.checked)].filter(Boolean);
+      const selected = getSelected();
+      emptyState.hidden = Boolean(primary);
+      downloadButtons.forEach(button => button.disabled = !primary);
+      copyButton.disabled = !primary;
       selected.forEach((input, index) => {
         const image = new Image();
         image.src = input.dataset.src;
@@ -183,30 +185,23 @@ ${imageHtml}
         image.className = index === 0 ? "maker-primary" : "maker-qualifier";
         badgeArea.append(image);
       });
-      const title = titleInput.value.trim() || "This project";
-      const projectUrl = urlInput.value.trim();
-      certificateTitle.textContent = title;
-      certificateUrl.textContent = projectUrl;
-      certificateUrl.href = projectUrl || "#";
-      certificateUrl.hidden = !projectUrl;
       const format = embedFormat.value;
       const layout = makerPreview.dataset.cardLayout || "standard";
       const background = makerPreview.dataset.cardBackground || "light";
       const accent = makerPreview.dataset.cardAccent || "#f7836a";
       const backgroundColor = background === "transparent" ? "transparent" : background === "dark" ? "#0d0e37" : "#ffffff";
       const textColor = background === "dark" ? "#ffffff" : "#0d0e37";
-      const imageHtml = selected.map(input => {
+      const imageHtml = selected.map((input, index) => {
         const localPath = new URL(input.dataset.src, window.location.origin).pathname.replace(/\.(png|svg)$/i, `.${format}`);
         const remoteSrc = `https://ai.selectora.cc${localPath}`;
-        return `  <img src="${remoteSrc}" alt="${escapeHtml(input.value)}: AI use disclosure badge" loading="lazy">`;
+        const horizontalImageStyle = layout === "horizontal" ? ` style="display:block;width:0;min-width:0;flex:${index === 0 ? "1.4" : "1"} 1 0;height:auto"` : "";
+        return `  <img src="${remoteSrc}" alt="${escapeHtml(input.value)}: AI use disclosure badge" loading="lazy"${horizontalImageStyle}>`;
       }).join("\n");
-      const wrapperTag = projectUrl ? `a href="${escapeHtml(projectUrl)}"` : "div";
-      const closingTag = projectUrl ? "a" : "div";
-      const layoutCss = layout === "horizontal" ? "display:grid;grid-template-columns:minmax(150px,.7fr) minmax(260px,1.3fr);gap:8px 14px;align-items:start" : layout === "minimal" ? "max-width:420px;padding:10px" : "max-width:680px;padding:18px";
-      embedCode.value = `<div class="ai-use-declared" style="${layoutCss};box-sizing:border-box;border:1px solid ${accent};border-radius:10px;background:${backgroundColor};color:${textColor};font:14px/1.4 system-ui,sans-serif" aria-label="AI use disclosure for ${escapeHtml(title)}">\n  <p style="margin:0 0 8px"><strong>${escapeHtml(title)}</strong> discloses its use of AI as:</p>\n  <${wrapperTag} style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;color:inherit;text-decoration:none">\n${imageHtml}\n  </${closingTag}>\n  <a href="https://ai.selectora.cc/badges/" style="grid-column:1/-1;margin-top:8px;padding-top:8px;border-top:1px solid ${accent};color:inherit;font-size:11px;font-weight:700">What does this mean? Explore AI USE DECLARED →</a>\n</div>`;
+      const layoutCss = layout === "minimal" ? "max-width:420px;padding:10px" : "max-width:680px;padding:18px";
+      const badgeLayoutCss = layout === "horizontal" ? "display:flex;align-items:center;gap:5px;overflow:hidden" : "display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px";
+      embedCode.value = primary ? `<div class="ai-use-declared" style="${layoutCss};box-sizing:border-box;border:1px solid ${accent};border-radius:10px;background:${backgroundColor};color:${textColor};font:14px/1.4 system-ui,sans-serif" aria-label="AI use self-declaration">\n  <p style="margin:0 0 8px"><strong>This work</strong> declares its use of AI as:</p>\n  <div style="${badgeLayoutCss};color:inherit">\n${imageHtml}\n  </div>\n  <a href="https://ai.selectora.cc/badges/" style="display:block;margin-top:8px;padding-top:8px;border-top:1px solid ${accent};color:inherit;font-size:11px;font-weight:700">What does this mean? Explore AI USE DECLARED →</a>\n</div>` : "Choose a main AI use in step 1 to generate the embed code.";
     }
     [...primaryInputs, ...qualifierInputs, embedFormat].forEach(input => input.addEventListener("change", updateMaker));
-    [titleInput, urlInput].forEach(input => input.addEventListener("input", updateMaker));
     makerPreview.addEventListener("cardstylechange", updateMaker);
     copyButton.addEventListener("click", async () => {
       try {
@@ -218,6 +213,72 @@ ${imageHtml}
         copyStatus.textContent = "Copied.";
       }
       setTimeout(() => copyStatus.textContent = "", 1800);
+    });
+    const loadImage = src => new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = reject;
+      image.src = src;
+    });
+    async function renderMakerCanvas() {
+      const selected = getSelected();
+      if (!selected.length) return null;
+      const images = await Promise.all(selected.map(input => loadImage(input.dataset.src)));
+      const width = 1200, padding = 72, gap = 18, badgeWidth = width - padding * 2;
+      const isHorizontal = makerPreview.dataset.cardLayout === "horizontal";
+      const totalWeight = isHorizontal ? 1.4 + Math.max(0, images.length - 1) : 0;
+      const horizontalUnit = isHorizontal ? (badgeWidth - gap * Math.max(0, images.length - 1)) / totalWeight : 0;
+      const itemWidths = images.map((image, index) => isHorizontal ? horizontalUnit * (index === 0 ? 1.4 : 1) : index === 0 ? badgeWidth : (badgeWidth - gap) / 2);
+      const heights = images.map((image, index) => {
+        const itemWidth = itemWidths[index];
+        return itemWidth * image.naturalHeight / image.naturalWidth;
+      });
+      let badgeHeight = isHorizontal ? Math.max(...heights) : heights[0];
+      if (!isHorizontal) for (let index = 1; index < heights.length; index += 2) badgeHeight += gap + Math.max(...heights.slice(index, index + 2));
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = Math.ceil(330 + badgeHeight + 55);
+      const context = canvas.getContext("2d");
+      const background = makerPreview.dataset.cardBackground || "light";
+      const accent = makerPreview.dataset.cardAccent || "#f7836a";
+      const foreground = background === "dark" ? "#ffffff" : "#0d0e37";
+      if (background !== "transparent") {
+        context.fillStyle = background === "dark" ? "#0d0e37" : "#ffffff";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      context.strokeStyle = accent; context.lineWidth = 5; context.strokeRect(3, 3, width - 6, canvas.height - 6);
+      context.fillStyle = foreground; context.font = "800 24px Arial"; context.fillText("AI USE DECLARED · BY SELECTORA", padding, 80);
+      context.font = "800 48px Arial"; context.fillText("AI-use declaration", padding, 165);
+      context.font = "700 27px Arial"; context.fillText("This work declares its use of AI as:", padding, 220);
+      let y = 270;
+      let horizontalX = padding;
+      images.forEach((image, index) => {
+        if (isHorizontal) {
+          const itemWidth = itemWidths[index];
+          context.drawImage(image, horizontalX, y + (badgeHeight - heights[index]) / 2, itemWidth, heights[index]);
+          horizontalX += itemWidth + gap;
+          return;
+        }
+        const isPrimary = index === 0;
+        const itemWidth = isPrimary ? badgeWidth : (badgeWidth - gap) / 2;
+        const x = isPrimary ? padding : padding + ((index - 1) % 2) * (itemWidth + gap);
+        context.drawImage(image, x, y, itemWidth, heights[index]);
+        if (isPrimary) y += heights[index] + gap;
+        else if (index % 2 === 0 || index === images.length - 1) y += Math.max(...heights.slice(index % 2 === 0 ? index - 1 : index, index + 1)) + gap;
+      });
+      return canvas;
+    }
+    const download = (href, filename) => { const link = document.createElement("a"); link.href = href; link.download = filename; link.click(); };
+    maker.querySelector("[data-download-pdf]").addEventListener("click", () => window.print());
+    maker.querySelector("[data-download-png]").addEventListener("click", async () => {
+      const canvas = await renderMakerCanvas();
+      if (canvas) download(canvas.toDataURL("image/png"), "ai-use-declared.png");
+    });
+    maker.querySelector("[data-download-svg]").addEventListener("click", async () => {
+      const canvas = await renderMakerCanvas();
+      if (!canvas) return;
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${canvas.width} ${canvas.height}" role="img" aria-label="AI-use declaration"><image width="${canvas.width}" height="${canvas.height}" href="${canvas.toDataURL("image/png")}"/></svg>`;
+      download(URL.createObjectURL(new Blob([svg], {type: "image/svg+xml"})), "ai-use-declared.svg");
     });
     updateMaker();
   }
