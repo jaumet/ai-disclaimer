@@ -1,10 +1,10 @@
 {% extends "base.html" %}{% load static %}
-{% block title %}Join AI USE DECLARATION — the support campaign{% endblock %}
-{% block meta_description %}Join the AI USE DECLARATION campaign and add your support to a transparent culture around the use of AI.{% endblock %}
+{% block title %}Join AI USE DECLARED — the support initiative{% endblock %}
+{% block meta_description %}Join AI USE DECLARED and add your support to a transparent culture around the use of AI.{% endblock %}
 {% block content %}
 <section class="adhesion-hero">
   <div>
-    <p class="eyebrow"><span></span> AI USE DECLARATION · A CAMPAIGN BY Nu a l'art</p>
+    <p class="eyebrow"><span></span> AI USE DECLARED · A Nu a l'art INITIATIVE</p>
     <h1>Add your name.<br><em>Make openness visible.</em></h1>
     <p>AI USE DECLARED grows through people and organisations that believe audiences deserve to know how AI was used. Joining is free and does not require an account.</p>
   </div>
@@ -18,7 +18,7 @@
 <section class="adhesion-content">
   <div class="adhesion-form-card">
     {% if joined %}
-      <div class="adhesion-thanks"><span>✓</span><h2>You’re part of it.</h2><p>Thank you for supporting truthful and visible AI disclosure.</p>{% if not user.is_authenticated %}<aside><strong>Want to register projects too?</strong><p>An account is entirely optional. It lets you publish verifiable project disclosures.</p><a class="text-link" href="{% url 'request_magic_link' %}">Create or access an account →</a></aside>{% endif %}</div>
+      <div class="adhesion-thanks"><span>✓</span><h2>You’re part of it.</h2><p>Thank you for supporting truthful and visible AI disclosure.</p>{% if not user.is_authenticated %}<aside><strong>Want to register projects too?</strong><p>An account is entirely optional. It lets you publish publicly documented project declarations.</p><a class="text-link" href="{% url 'request_magic_link' %}">Create or access an account →</a></aside>{% endif %}</div>
     {% else %}
       <p class="eyebrow"><span></span> JOIN IN UNDER A MINUTE</p>
       <h2>Support the initiative.</h2>

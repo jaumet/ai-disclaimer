@@ -22,6 +22,22 @@ def home(request):
         "campaign_target": 100,
         "campaign_progress": min(Adhesion.objects.count(), 100),
         "campaign_started_on": CAMPAIGN_STARTED_ON,
+        "primary_badge_summary": [
+            ("badges/primary/01-ai-made.png", "AI-Made"),
+            ("badges/primary/02-ai-assisted.png", "AI-Assisted"),
+            ("badges/primary/03-ai-edited.png", "AI-Edited"),
+            ("badges/primary/04-no-generative-ai.png", "No Generative AI"),
+            ("badges/primary/05-no-ai-used.png", "No AI Used"),
+        ],
+        "qualifier_badge_summary": [
+            ("badges/secondary/01-human-reviewed.png", "Human-Reviewed"),
+            ("badges/secondary/02-ai-translated.png", "AI-Translated"),
+            ("badges/secondary/03-synthetic-voice.png", "Synthetic Voice"),
+            ("badges/secondary/04-ai-generated-images.png", "AI-Generated Images"),
+            ("badges/secondary/05-ai-generated-code.png", "AI-Generated Code"),
+            ("badges/secondary/06-ai-generated-video.svg", "AI-Generated Video"),
+            ("badges/secondary/07-ai-generated-text.svg", "AI-Generated Text"),
+        ],
     })
 
 
@@ -30,7 +46,7 @@ def project_list(request):
 
 
 def badge_guide(request):
-    return redirect("/#badges")
+    return render(request, "projects/badge_guide.html")
 
 
 def certificate_maker(request):

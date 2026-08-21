@@ -16,7 +16,7 @@
   <meta property="og:site_name" content="AI USE DECLARED by Selectora">
   <meta property="og:locale" content="en_US">
   <meta property="og:title" content="{% block og_title %}AI USE DECLARED — Show how AI was used{% endblock %}">
-  <meta property="og:description" content="{% block og_description %}Give your website or project one clear AI-use category and optional qualifiers. Make transparency visible, public and verifiable.{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}Give your website or project one clear AI-use category and optional qualifiers. Make transparency visible, public and publicly documented.{% endblock %}">
   <meta property="og:url" content="{{ request.build_absolute_uri }}">
   <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_image_path }}">
   <meta property="og:image:secure_url" content="https://{{ request.get_host }}{{ og_image_path }}">
@@ -27,7 +27,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="AI USE DECLARED — Show how AI was used">
-  <meta name="twitter:description" content="A clear badge system for truthful, public and verifiable AI-use disclosure.">
+  <meta name="twitter:description" content="A clear badge system for truthful, public and publicly documented AI-use disclosure.">
   <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_image_path }}">
   <meta name="twitter:image:alt" content="AI USE DECLARED by Selectora — Show how AI was used">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,7 +43,7 @@
     </a>
     <nav id="main-navigation" class="desktop-navigation" aria-label="Main navigation">
       <a href="{% url 'project_list' %}">Declared projects</a>
-      <a href="{% url 'home' %}#badges">The badges</a>
+      <a href="{% url 'badge_guide' %}">The badges</a>
       <a href="{% url 'project_create' %}">Declare a project</a>
       {% if user.is_authenticated %}
         <a href="{% url 'dashboard' %}">My projects</a>
@@ -51,13 +51,13 @@
       {% else %}
         <a href="{% url 'request_magic_link' %}">Sign in</a>
       {% endif %}
-      <a class="button button-small" href="{% url 'join_initiative' %}">Join the campaign <span aria-hidden="true">↗</span></a>
+      <a class="button button-small" href="{% url 'join_initiative' %}">Support AI USE DECLARED <span aria-hidden="true">↗</span></a>
     </nav>
     <details class="mobile-navigation">
       <summary aria-label="Open navigation menu"><span aria-hidden="true"></span></summary>
       <nav aria-label="Mobile navigation">
-        <a class="campaign-nav-link" href="{% url 'join_initiative' %}">Join the campaign <span>→</span></a>
-        <a href="{% url 'project_list' %}">Declared projects</a><a href="{% url 'home' %}#badges">The badges</a><a href="{% url 'project_create' %}">Declare a project</a>
+        <a class="campaign-nav-link" href="{% url 'join_initiative' %}">Support AI USE DECLARED <span>→</span></a>
+        <a href="{% url 'project_list' %}">Declared projects</a><a href="{% url 'badge_guide' %}">The badges</a><a href="{% url 'project_create' %}">Declare a project</a>
         {% if user.is_authenticated %}<a href="{% url 'dashboard' %}">My projects</a><form method="post" action="{% url 'sign_out' %}">{% csrf_token %}<button class="nav-button">Sign out</button></form>{% else %}<a href="{% url 'request_magic_link' %}">Sign in</a>{% endif %}
       </nav>
     </details>
@@ -93,12 +93,12 @@
     </div>
   </aside>
   <aside class="initiative-band" aria-label="About the initiative">
-    <p><strong>AI USE DECLARATION is a Nu a l'art initiative.</strong> The campaign grows through people and organisations that believe in transparent AI use.</p>
-    <a class="initiative-join" href="{% url 'join_initiative' %}">Join AI USE DECLARATION <small>Add your name to the campaign →</small></a>
+    <p><strong>AI USE DECLARED is a Nu a l'art initiative.</strong> It grows through people and organisations that believe in transparent AI use.</p>
+    <a class="initiative-join" href="{% url 'join_initiative' %}">Support the initiative <small aria-hidden="true">→</small></a>
   </aside>
   <footer>
     <a class="brand brand-light" href="{% url 'home' %}"><span class="official-logo footer-logo" aria-hidden="true"><img src="{% static 'images/ai-use-declared-logo.png' %}" alt=""></span><span class="brand-copy"><strong>AI USE DECLARED</strong><small>by Selectora</small></span></a>
-    <p><a href="{% url 'project_list' %}">Declared projects</a> · <a href="{% url 'home' %}#badges">The badges</a></p>
+    <p><a href="{% url 'project_list' %}">Declared projects</a> · <a href="{% url 'badge_guide' %}">The badges</a></p>
     <p class="footer-note"><a href="{% url 'transparency_pledge' %}">Transparency Pledge</a><br>Show how AI was used.</p>
   </footer>
   <script src="{% static 'js/site.js' %}" defer></script>

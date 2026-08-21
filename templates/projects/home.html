@@ -1,16 +1,19 @@
 {% extends "base.html" %}{% load static %}
 {% block content %}
-<section class="hero">
+<section class="hero home-hero">
   <div class="hero-copy">
     <p class="eyebrow"><span></span> AI USED? SAY HOW.</p>
     <h1>AI USE<br><em>DECLARED</em></h1>
-    <p class="hero-intro"><strong>Being open about how AI was used builds trust, gives context to creative work, and makes transparency something to be proud of.</strong></p>
-    <div class="hero-pledge"><span><strong>AI USE DECLARED Transparency Pledge</strong><small>Our commitment to truthful, responsible and verifiable disclosure.</small></span><div class="pledge-listen"><b>Listen to</b><div class="compact-audio" data-compact-audio><audio preload="metadata" src="{% static 'audio/TTS-AI-transparency-declaration.mp3' %}"></audio><button type="button" data-audio-toggle aria-label="Play declaration" aria-pressed="false">▶</button><button type="button" data-audio-stop aria-label="Stop declaration">■</button><output data-audio-time aria-live="off">0:00 / 0:00</output><label aria-label="Volume"><span aria-hidden="true">◖</span><input data-audio-volume type="range" min="0" max="1" step="0.05" value="1"></label></div></div><a href="{% url 'transparency_pledge' %}">Or read the pledge →</a></div>
-    <div class="hero-actions"><a class="hero-declare" href="{% url 'project_create' %}"><span aria-hidden="true">✓</span><span><strong>Declare a project</strong><small>Create a public record of where and how AI was used in a specific project.</small></span><b aria-hidden="true">Start declaration →</b></a></div>
+    <h2 class="hero-proposition">Declare how AI was used in a project.</h2>
+    <p class="hero-intro">Create a public, shareable record using a clear system of badges.</p>
+    <div class="hero-primary-actions">
+      <a class="button" href="{% url 'project_create' %}">Declare a project <span>→</span></a>
+      <a class="button button-outline" href="{% url 'project_list' %}">See declared projects</a>
+    </div>
   </div>
-  <div class="hero-visual badge-story" role="img" tabindex="0" aria-label="The twelve AI USE DECLARED badges float into primary and qualifier columns. AI-Assisted and Human-Reviewed are selected and placed on a disclosure card. Hover or focus to pause the animation.">
+  <div class="hero-visual badge-story" role="img" tabindex="0" aria-label="AI USE DECLARED badges move into primary and qualifier columns. AI-Assisted and Human-Reviewed are selected and placed on a public declaration card. Hover or focus to pause the animation.">
     <div class="story-halo" aria-hidden="true"></div>
-    <div class="story-columns" aria-hidden="true"><span>PRIMARY</span><span>QUALIFIERS</span></div>
+    <div class="story-columns" aria-hidden="true"><span>PRIMARY</span><span>DETAILS</span></div>
     <div class="story-badge p1"><img src="{% static 'badges/primary/01-ai-made.png' %}" alt=""></div>
     <div class="story-badge p2 is-choice"><img src="{% static 'badges/primary/02-ai-assisted.png' %}" alt=""></div>
     <div class="story-badge p3"><img src="{% static 'badges/primary/03-ai-edited.png' %}" alt=""></div>
@@ -23,79 +26,38 @@
     <div class="story-badge q5"><img src="{% static 'badges/secondary/05-ai-generated-code.png' %}" alt=""></div>
     <div class="story-badge q6"><img src="{% static 'badges/secondary/06-ai-generated-video.svg' %}" alt=""></div>
     <div class="story-badge q7"><img src="{% static 'badges/secondary/07-ai-generated-text.svg' %}" alt=""></div>
-    <div class="story-pointer pointer-primary" aria-hidden="true">➤</div>
-    <div class="story-pointer pointer-qualifier" aria-hidden="true">➤</div>
+    <div class="story-pointer pointer-primary" aria-hidden="true">➤</div><div class="story-pointer pointer-qualifier" aria-hidden="true">➤</div>
     <div class="story-certificate" aria-hidden="true">
       <div class="certificate-top"><span class="certificate-mark official-certificate-logo"><img src="{% static 'images/ai-use-declared-logo.png' %}" alt=""></span><span>AI USE DECLARED · BY SELECTORA</span><span class="certificate-check">✓</span></div>
-      <p>This project was created with</p>
-      <img src="{% static 'badges/primary/02-ai-assisted.png' %}" alt="">
-      <img class="certificate-qualifier" src="{% static 'badges/secondary/01-human-reviewed.png' %}" alt="">
-      <div class="certificate-foot"><span>Show how AI was used.</span><span>Verified record</span></div>
+      <p>This project declares its AI use as</p>
+      <img src="{% static 'badges/primary/02-ai-assisted.png' %}" alt=""><img class="certificate-qualifier" src="{% static 'badges/secondary/01-human-reviewed.png' %}" alt="">
+      <div class="certificate-foot"><span>Show how AI was used.</span><span>Public record</span></div>
     </div>
     <span class="story-spark one" aria-hidden="true">✦</span><span class="story-spark two" aria-hidden="true">✦</span>
   </div>
 </section>
 
-<section class="home-campaign">
-  <div class="campaign-call">
-    <p class="campaign-kicker"><span class="campaign-new">NEW</span><strong>SIGN FOR AI USE DECLARED</strong></p>
-    <h2>Make openness about AI use part of the culture.</h2>
-    <p>AI USE DECLARATION is a public signature campaign. We are gathering the first {{ campaign_target }} people and organisations who want a clear and honest way to show where and how AI was used—or not used—in a project.</p>
-    <div class="campaign-audiences"><span>AI users</span><span>Non-AI users</span><span>Organizations</span></div>
+<section id="how-it-works" class="how-section home-how home-how-compact">
+  <div class="how-output"><h3>Ready to publish and share</h3><p>Publish a public record, download its declaration card and copy HTML to embed it on the project website.</p></div>
+  <div class="home-badge-summary" aria-label="Summary of the AI USE DECLARED classification">
+    <div><h3>Choose one main badge</h3><div class="summary-badges">{% for image, label in primary_badge_summary %}<img src="{% static image %}" alt="{{ label }}">{% endfor %}</div></div>
+    <div><h3>Add any details that apply</h3><div class="summary-badges">{% for image, label in qualifier_badge_summary %}<img src="{% static image %}" alt="{{ label }}">{% endfor %}</div></div>
   </div>
-  <aside class="home-campaign-count">
-    <p>PUBLIC SIGNATURES</p><strong>{{ adhesion_count }}<small>/ {{ campaign_target }}</small></strong>
-    <div class="home-campaign-progress" aria-label="{{ adhesion_count }} of {{ campaign_target }} public signatures"><i style="width:{{ campaign_progress }}%"></i></div>
-    <span>Campaign open since {{ campaign_started_on|date:"F j, Y" }}</span>
-    <a class="button campaign-main-action" href="{% url 'join_initiative' %}">Sign it <span>→</span></a>
-    <p class="campaign-join-line">Join AI transparency</p>
-    <a class="campaign-list-link" href="{% url 'join_initiative' %}#public-adhesions">See the public signatures</a>
-  </aside>
+  <div class="how-actions"><a class="button" href="{% url 'project_create' %}">Declare a project <span>→</span></a><a class="text-link" href="{% url 'badge_guide' %}">Explore all badges and definitions →</a></div>
 </section>
 
-<section id="how-it-works" class="how-section home-how">
-  <div class="section-heading">
-    <div><p class="eyebrow"><span></span> AI USE DECLARED · HOW IT WORKS</p><h2>Declare how AI<br>was used.</h2></div>
-    <p>Each declaration belongs to a person or organisation and describes the use of AI in a specific project.</p>
-  </div>
-  <article class="path-card single-declaration-path"><div class="step-icon">✓</div><h3>Create a public project declaration</h3><p>Select the badges that describe where and how AI contributed. The declaration is linked to the project, appears in the public registry and can be updated when the process changes.</p><ul><li>A declaration for one specific project</li><li>Public and shareable record</li><li>Downloadable declaration card</li><li>HTML embed for the project website</li></ul><a class="button registered-choice" href="{% url 'project_create' %}">Declare a project <span>→</span></a></article>
+<section class="support-initiative">
+  <div class="support-lead"><div><p class="eyebrow"><span></span> SUPPORT AI USE DECLARED</p><h2>Support the initiative</h2><p>AI USE DECLARED grows through people and organisations that believe audiences deserve to know how AI was used.</p></div><a class="button" href="{% url 'join_initiative' %}">Add your support <span>→</span></a></div>
+  <div class="support-pledge"><div><h2>The Transparency Pledge</h2><p>A commitment to truthful, clear and responsible disclosure of how AI was used.</p></div><div class="home-pledge-actions"><div><strong>Listen to the pledge</strong><div class="compact-audio" data-compact-audio><audio preload="metadata" src="{% static 'audio/TTS-AI-transparency-declaration.mp3' %}"></audio><button type="button" data-audio-toggle aria-label="Play pledge" aria-pressed="false">▶</button><button type="button" data-audio-stop aria-label="Stop pledge">■</button><output data-audio-time aria-live="off">0:00 / 0:00</output><label aria-label="Volume"><span aria-hidden="true">◖</span><input data-audio-volume type="range" min="0" max="1" step="0.05" value="1"></label></div></div><a class="text-link" href="{% url 'transparency_pledge' %}">Read the pledge →</a></div></div>
 </section>
 
-<section class="beyond-detection" aria-labelledby="beyond-detection-title">
-  <div class="beyond-detection-heading"><p class="eyebrow"><span></span> TRANSPARENCY WITH CONTEXT</p><h2 id="beyond-detection-title">Beyond detection:<br>declare how AI was used.</h2></div>
-  <div class="beyond-detection-copy">
-    <p>The <a href="https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng" target="_blank" rel="noopener">EU AI Act</a> establishes transparency obligations for certain AI systems and AI-generated or manipulated content, including machine-readable markings and disclosure requirements under <a href="https://digital-strategy.ec.europa.eu/en/policies/guidelines-ai-transparency-obligations" target="_blank" rel="noopener">Article 50</a>.</p>
-    <p><strong>AI USE DECLARED goes one step further.</strong> Rather than relying on detectors to guess whether AI was involved, it enables creators and organisations to state it openly: which tools were used, for which tasks, and to what extent.</p>
-    <p>Detectors may indicate possible AI involvement, but they cannot reconstruct the creative process or explain the respective contributions of humans and AI. A clear, public, human-readable and machine-readable self-declaration provides that missing context.</p>
-    <p class="beyond-detection-note"><strong>AI USE DECLARED is aligned with the transparency goals of the EU AI Act and is designed to complement—not replace—legally required markings and provenance systems.</strong></p>
-  </div>
-</section>
-
-<section class="home-badges" id="badges">
-  <div class="section-heading"><div><p class="eyebrow"><span></span> A PROPOSED AI-USE CLASSIFICATION</p><h2>A clear classification.<br>Not fine print.</h2></div><p>Start with exactly one primary category, then add every qualifier that meaningfully describes the process. The result is readable at a glance and detailed when needed.</p></div>
-  <h3 class="badge-row-title">Choose one overall category</h3>
-  <div class="home-badge-grid primary-badge-grid">
-    <article><img src="{% static 'badges/primary/01-ai-made.png' %}" alt="AI-Made"><h3>AI-MADE</h3><p>Generative AI produced the main or essential part of the result.</p><small><strong>Example:</strong> an AI-generated illustration art-directed by a person.</small></article>
-    <article><img src="{% static 'badges/primary/02-ai-assisted.png' %}" alt="AI-Assisted"><h3>AI-ASSISTED</h3><p>The work is human-led, with substantial AI contributions to ideas, writing, code, design or production.</p><small><strong>Example:</strong> a human-designed product containing meaningful AI-generated code.</small></article>
-    <article><img src="{% static 'badges/primary/03-ai-edited.png' %}" alt="AI-Edited"><h3>AI-EDITED</h3><p>The original is human-made and AI appears later for correction, retouching, cleanup or post-production.</p><small><strong>Example:</strong> a human photograph cleaned up with generative removal tools.</small></article>
-    <article><img src="{% static 'badges/primary/04-no-generative-ai.png' %}" alt="No Generative AI"><h3>NO GENERATIVE AI</h3><p>No generative AI created or transformed content; analytical AI may still be present.</p><small><strong>Example:</strong> a human-designed app using a recommendation algorithm.</small></article>
-    <article><img src="{% static 'badges/primary/05-no-ai-used.png' %}" alt="No AI Used"><h3>NO AI USED</h3><p>No generative or analytical AI system was used to produce the project.</p><small><strong>Example:</strong> a hand-coded website made without AI-powered tools or features.</small></article>
-  </div>
-  <h3 class="badge-row-title">Add the details that apply</h3>
-  <div class="home-badge-grid qualifier-badge-grid">
-    <article><img src="{% static 'badges/secondary/01-human-reviewed.png' %}" alt="Human-Reviewed"><h3>HUMAN-REVIEWED</h3><p>A person meaningfully reviewed the result before publication.</p><small><strong>Example:</strong> an editor checked and corrected an AI-produced draft.</small></article>
-    <article><img src="{% static 'badges/secondary/02-ai-translated.png' %}" alt="AI-Translated"><h3>AI-TRANSLATED</h3><p>A significant part of the text was translated using AI.</p><small><strong>Example:</strong> website copy translated with an AI translation service.</small></article>
-    <article><img src="{% static 'badges/secondary/03-synthetic-voice.png' %}" alt="Synthetic Voice"><h3>SYNTHETIC VOICE</h3><p>The project contains AI-generated narration, synthetic speech or a cloned voice.</p><small><strong>Example:</strong> an explainer narrated using a licensed synthetic voice.</small></article>
-    <article><img src="{% static 'badges/secondary/04-ai-generated-images.png' %}" alt="AI-Generated Images"><h3>AI-GENERATED IMAGES</h3><p>The project contains images created wholly or partly with generative AI.</p><small><strong>Example:</strong> campaign artwork generated from prompts and then edited.</small></article>
-    <article><img src="{% static 'badges/secondary/05-ai-generated-code.png' %}" alt="AI-Generated Code"><h3>AI-GENERATED CODE</h3><p>AI generated a meaningful portion of the code, beyond trivial autocomplete.</p><small><strong>Example:</strong> AI drafted components that a developer reviewed and integrated.</small></article>
-    <article><img src="{% static 'badges/secondary/06-ai-generated-video.svg' %}" alt="AI-Generated Video"><h3>AI-GENERATED VIDEO</h3><p>The project contains video created or materially transformed with generative AI.</p><small><strong>Example:</strong> an AI-generated reel, story, animation or video sequence.</small></article>
-    <article><img src="{% static 'badges/secondary/07-ai-generated-text.svg' %}" alt="AI-Generated Text"><h3>AI-GENERATED TEXT</h3><p>AI meaningfully helped write, synthesise, restructure or expand the text.</p><small><strong>Example:</strong> AI expanded an outline into copy that a person revised.</small></article>
-  </div>
-  <aside class="badge-rules"><strong>Keep it coherent.</strong><span>NO AI USED may only be paired with HUMAN-REVIEWED.</span><span>NO GENERATIVE AI cannot be paired with generative-AI details.</span><span>When in doubt, choose the category that makes AI involvement more visible.</span></aside>
+<section class="beyond-detection beyond-detection-compact" aria-labelledby="beyond-detection-title">
+  <div><p class="eyebrow"><span></span> TRANSPARENCY WITH CONTEXT</p><h2 id="beyond-detection-title">Beyond detection:<br>declare how AI was used.</h2></div>
+  <div class="beyond-detection-copy"><p>Detectors may estimate whether AI was involved, but they cannot explain the creative process. AI USE DECLARED provides that missing context through a public, human-readable and machine-readable declaration.</p><p>As a voluntary system, AI USE DECLARED complements—not replaces—the transparency obligations, machine-readable markings and provenance systems required by the <a href="https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng" target="_blank" rel="noopener">EU AI Act</a> and its <a href="https://digital-strategy.ec.europa.eu/en/policies/guidelines-ai-transparency-obligations" target="_blank" rel="noopener">Article 50 transparency guidelines</a>.</p></div>
 </section>
 
 {% if projects %}<section class="recent-section">
-  <div class="section-heading"><div><p class="eyebrow"><span></span> PUBLIC REGISTRY</p><h2>Recently registered.</h2></div></div>
+  <div class="section-heading"><div><p class="eyebrow"><span></span> PUBLIC REGISTRY</p><h2>Recently declared.</h2></div></div>
   <ul class="recent-project-list">{% for project in projects %}<li><a href="{{ project.get_absolute_url }}"><strong>{{ project.title }}</strong><span>{{ project.get_primary_badge_display }}</span><time datetime="{{ project.created_at|date:'Y-m-d' }}">{{ project.created_at|date:"M j, Y" }}</time><b aria-hidden="true">→</b></a></li>{% endfor %}</ul>
   <a class="recent-all-link" href="{% url 'project_list' %}">View all declared projects <span>→</span></a>
 </section>{% endif %}
