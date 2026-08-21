@@ -223,6 +223,7 @@ ${imageHtml}
   }
   document.querySelectorAll("[data-compact-audio]").forEach(player => {
     const audio = player.querySelector("audio");
+    const toggle = player.querySelector("[data-audio-toggle]");
     const time = player.querySelector("[data-audio-time]");
     const volume = player.querySelector("[data-audio-volume]");
     const formatTime = seconds => {
@@ -230,13 +231,20 @@ ${imageHtml}
       return `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, "0")}`;
     };
     const updateTime = () => time.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
-    player.querySelector("[data-audio-play]").addEventListener("click", () => audio.play().catch(() => {}));
-    player.querySelector("[data-audio-pause]").addEventListener("click", () => audio.pause());
+    const updateToggle = () => {
+      const playing = !audio.paused && !audio.ended;
+      toggle.textContent = playing ? "Ⅱ" : "▶";
+      toggle.setAttribute("aria-label", playing ? "Pause declaration" : "Play declaration");
+      toggle.setAttribute("aria-pressed", String(playing));
+    };
+    toggle.addEventListener("click", () => audio.paused ? audio.play().catch(() => {}) : audio.pause());
     player.querySelector("[data-audio-stop]").addEventListener("click", () => { audio.pause(); audio.currentTime = 0; updateTime(); });
     volume.addEventListener("input", () => { audio.volume = Number(volume.value); });
     audio.addEventListener("loadedmetadata", updateTime);
     audio.addEventListener("timeupdate", updateTime);
-    audio.addEventListener("ended", updateTime);
+    audio.addEventListener("play", updateToggle);
+    audio.addEventListener("pause", updateToggle);
+    audio.addEventListener("ended", () => { updateTime(); updateToggle(); });
   });
   const form = document.querySelector("[data-badge-form]");
   if (!form) return;
