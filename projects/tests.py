@@ -143,6 +143,7 @@ class ProjectTests(TestCase):
             response = self.client.get(reverse(name))
             self.assertEqual(response.status_code, 200)
             self.assertContains(response, "aiud-details-ai-use-declared")
+            self.assertContains(response, "AI-use declaration for")
             self.assertContains(response, reverse("site_ai_disclosure"))
             self.assertNotContains(response, "688b4cbc-6bb2-47d9-9336-78cff1bfb575")
             self.assertContains(response, "02-ai-assisted.png")
