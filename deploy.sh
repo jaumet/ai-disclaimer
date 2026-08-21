@@ -149,6 +149,7 @@ remote_step 'Installing dependencies'
 remote_step 'Applying database and static-file updates'
 "$VENV_DIR/bin/python" manage.py migrate --noinput
 "$VENV_DIR/bin/python" manage.py collectstatic --noinput
+[[ -f "$APP_DIR/staticfiles/staticfiles.json" ]] || remote_fail 'Versioned static-file manifest was not created.'
 "$VENV_DIR/bin/python" manage.py check
 
 remote_step 'Restarting the application'
