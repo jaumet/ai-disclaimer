@@ -140,7 +140,15 @@ class ProjectTests(TestCase):
     def test_public_guide_registry_and_pledge_render(self):
         self.client.logout()
         for name in ("badge_guide", "certificate_maker", "project_list", "transparency_pledge"):
-            self.assertEqual(self.client.get(reverse(name)).status_code, 200)
+            response = self.client.get(reverse(name))
+            self.assertEqual(response.status_code, 200)
+            self.assertContains(response, "aiud-details-ai-use-declared")
+            self.assertContains(response, "688b4cbc-6bb2-47d9-9336-78cff1bfb575")
+            self.assertContains(response, "AI use declared for this website")
+            self.assertContains(response, "PRIMARY DECLARATION")
+            self.assertContains(response, "ADDITIONAL DISCLOSURES")
+            self.assertContains(response, "02-ai-assisted.svg")
+            self.assertContains(response, "01-human-reviewed.svg")
 
     def test_no_ai_rejects_ai_qualifier(self):
         form = ProjectForm(data={

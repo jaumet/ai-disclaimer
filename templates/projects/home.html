@@ -6,7 +6,7 @@
     <h1>AI USE<br><em>DECLARED</em></h1>
     <p class="hero-intro"><strong>Being open about how AI was used builds trust, gives context to creative work, and makes transparency something to be proud of.</strong></p>
     <a class="hero-pledge" href="{% url 'transparency_pledge' %}"><span aria-hidden="true">✦</span><span><strong>AI USE DECLARED Transparency Pledge</strong><small>Our commitment to truthful, responsible and verifiable disclosure.</small></span><b aria-hidden="true">Read the pledge →</b></a>
-    <div class="hero-actions"><a class="button choice-button registered-choice" href="{% url 'project_create' %}"><span class="choice-icon" aria-hidden="true">✓</span><span>Declare a project</span><span class="choice-arrow" aria-hidden="true">→</span></a></div>
+    <div class="hero-actions"><a class="hero-declare" href="{% url 'project_create' %}"><span aria-hidden="true">✓</span><span><strong>Declare a project</strong><small>Create a public record of where and how AI was used in a specific project.</small></span><b aria-hidden="true">Start declaration →</b></a></div>
     <div class="classification-formula" aria-label="One primary badge plus optional qualifiers equals a clear AI disclosure"><span><strong>1</strong> PRIMARY BADGE</span><b>+</b><span>OPTIONAL QUALIFIERS</span><b>=</b><span>CLEAR DISCLOSURE</span></div>
   </div>
   <div class="hero-visual badge-story" role="img" tabindex="0" aria-label="The twelve AI USE DECLARED badges float into primary and qualifier columns. AI-Assisted and Human-Reviewed are selected and placed on a disclosure card. Hover or focus to pause the animation.">
@@ -38,8 +38,20 @@
 </section>
 
 <section class="home-campaign">
-  <div><p class="eyebrow"><span></span> AI USE DECLARATION · THE CAMPAIGN</p><h2>Make openness about AI use part of the culture.</h2><p>Join the AI USE DECLARATION proposal and help build a culture where people can be honest—and still proud—when they publicly explain where and how AI was used in a project: a website, an app, software or any other creative work.</p></div>
-  <div class="home-campaign-count"><strong>{{ adhesion_count }}</strong><span>supporters since {{ campaign_started_on|date:"F j, Y" }}</span><a class="button" href="{% url 'join_initiative' %}">Join the campaign and see the list <span>→</span></a></div>
+  <div class="campaign-call">
+    <p class="campaign-kicker"><span class="campaign-new">NEW</span><strong>SIGN FOR AI USE DECLARED</strong></p>
+    <h2>Make openness about AI use part of the culture.</h2>
+    <p>AI USE DECLARATION is a public signature campaign. We are gathering the first {{ campaign_target }} people and organisations who want a clear and honest way to show where and how AI was used—or not used—in a project.</p>
+    <div class="campaign-audiences"><span>AI users</span><span>Non-AI users</span><span>Organizations</span></div>
+  </div>
+  <aside class="home-campaign-count">
+    <p>PUBLIC SIGNATURES</p><strong>{{ adhesion_count }}<small>/ {{ campaign_target }}</small></strong>
+    <div class="home-campaign-progress" aria-label="{{ adhesion_count }} of {{ campaign_target }} public signatures"><i style="width:{{ campaign_progress }}%"></i></div>
+    <span>Campaign open since {{ campaign_started_on|date:"F j, Y" }}</span>
+    <a class="button campaign-main-action" href="{% url 'join_initiative' %}">Sign it <span>→</span></a>
+    <p class="campaign-join-line">Join AI transparency</p>
+    <a class="campaign-list-link" href="{% url 'join_initiative' %}#public-adhesions">See the public signatures</a>
+  </aside>
 </section>
 
 <section id="how-it-works" class="how-section home-how">

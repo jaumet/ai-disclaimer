@@ -62,6 +62,40 @@
   </header>
   {% if messages %}<div class="messages" role="status">{% for message in messages %}<div>{{ message }}</div>{% endfor %}</div>{% endif %}
   <main id="main">{% block content %}{% endblock %}</main>
+  <aside class="site-self-disclosure" aria-label="AI use declaration for this website">
+    <div class="aiud-widget">
+      <style>
+        .aiud-widget{position:relative;display:inline-block;font:14px/1.4 system-ui,sans-serif;color:#0d0e37}
+        .aiud-trigger{display:flex;align-items:center;gap:9px;width:max-content;max-width:100%;padding:7px 10px 7px 7px;border:1px solid #d5d5dc;border-radius:8px;background:#fff;color:#0d0e37;text-decoration:none;box-shadow:0 4px 12px #0d0e3712}
+        .aiud-logo{position:relative;width:42px;height:42px;flex:0 0 42px;overflow:hidden;border-radius:50%}.aiud-logo img{position:absolute;width:112.6%;height:112.6%;left:-6.3%;top:-6.3%;max-width:none}
+        .aiud-label{font-weight:800;letter-spacing:.03em}.aiud-label small{display:block;color:#66677d;font-size:10px;font-weight:600;letter-spacing:0}
+        .aiud-details{position:absolute;z-index:2147483647;left:0;bottom:calc(100% + 9px);visibility:hidden;opacity:0;transform:translateY(5px);width:min(370px,90vw);padding:15px;border:1px solid #d5d5dc;border-radius:11px;background:#fff;box-shadow:0 18px 45px #0d0e3728;transition:.18s ease;pointer-events:none}
+        .aiud-widget:hover .aiud-details,.aiud-widget:focus-within .aiud-details{visibility:visible;opacity:1;transform:none;pointer-events:auto}
+        .aiud-details p{margin:0 0 10px}.aiud-project{padding-bottom:10px;border-bottom:1px solid #e5e5ea}.aiud-project strong{font-size:16px}.aiud-group-label{margin:10px 0 5px!important;color:#66677d;font-size:10px;font-weight:800;letter-spacing:.08em}.aiud-primary img{display:block;width:100%;height:auto;border-radius:5px}.aiud-badges{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.aiud-badges img{display:block;width:100%;height:auto;border-radius:5px}.aiud-details>a{display:inline-block;margin-top:10px;color:#0d0e37;font-weight:750;text-underline-offset:3px}.aiud-details .aiud-meaning{display:block;padding-top:9px;border-top:1px solid #ddd;font-size:11px}
+      </style>
+      <a class="aiud-trigger" href="https://ai.selectora.cc/projects/688b4cbc-6bb2-47d9-9336-78cff1bfb575/disclosure/" target="aiud_disclosure" aria-describedby="aiud-details-ai-use-declared" onclick="window.open(this.href,'aiud_disclosure','popup=yes,width=680,height=760,resizable=yes,scrollbars=yes');return false;">
+        <span class="aiud-logo"><img src="https://ai.selectora.cc/static/images/ai-use-declared-logo.png" alt=""></span>
+        <span class="aiud-label">AI USE DECLARED<small>Hover to see how AI was used</small></span>
+      </a>
+      <div class="aiud-details" id="aiud-details-ai-use-declared" role="tooltip">
+        <p class="aiud-project"><strong>ai.selectora.cc</strong><br>AI use declared for this website</p>
+        <p class="aiud-group-label">PRIMARY DECLARATION</p>
+        <div class="aiud-primary">
+          <img src="https://ai.selectora.cc/static/badges/primary/02-ai-assisted.svg" alt="AI-ASSISTED disclosure badge" loading="lazy">
+        </div>
+        <p class="aiud-group-label">ADDITIONAL DISCLOSURES</p>
+        <div class="aiud-badges">
+          <img src="https://ai.selectora.cc/static/badges/secondary/01-human-reviewed.svg" alt="HUMAN-REVIEWED disclosure badge" loading="lazy">
+          <img src="https://ai.selectora.cc/static/badges/secondary/02-ai-translated.svg" alt="AI-TRANSLATED disclosure badge" loading="lazy">
+          <img src="https://ai.selectora.cc/static/badges/secondary/04-ai-generated-images.svg" alt="AI-GENERATED IMAGES disclosure badge" loading="lazy">
+          <img src="https://ai.selectora.cc/static/badges/secondary/05-ai-generated-code.svg" alt="AI-GENERATED CODE disclosure badge" loading="lazy">
+          <img src="https://ai.selectora.cc/static/badges/secondary/07-ai-generated-text.svg" alt="AI-GENERATED TEXT disclosure badge" loading="lazy">
+        </div>
+        <a href="https://ai.selectora.cc/projects/688b4cbc-6bb2-47d9-9336-78cff1bfb575/disclosure/" target="aiud_disclosure">View registered disclosure →</a>
+        <a class="aiud-meaning" href="https://ai.selectora.cc/badges/" target="_blank">What does this mean? Explore AI USE DECLARED →</a>
+      </div>
+    </div>
+  </aside>
   <aside class="initiative-band" aria-label="About the initiative">
     <p><strong>AI USE DECLARATION is a Nu a l'art initiative.</strong> The campaign grows through people and organisations that believe in transparent AI use.</p>
     <a class="initiative-join" href="{% url 'join_initiative' %}">Join AI USE DECLARATION <small>Add your name to the campaign →</small></a>

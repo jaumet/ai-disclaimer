@@ -19,6 +19,8 @@ def home(request):
     return render(request, "projects/home.html", {
         "projects": Project.objects.filter(is_public=True)[:9],
         "adhesion_count": Adhesion.objects.count(),
+        "campaign_target": 100,
+        "campaign_progress": min(Adhesion.objects.count(), 100),
         "campaign_started_on": CAMPAIGN_STARTED_ON,
     })
 
