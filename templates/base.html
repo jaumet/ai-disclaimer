@@ -4,9 +4,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
   <link rel="icon" href="{% static 'images/favicon.ico' %}" sizes="16x16 32x32 48x48">
   <meta name="description" content="{% block meta_description %}Show how AI was used. A clear badge system for truthful, public AI disclosure in websites and digital projects.{% endblock %}">
-  <meta name="theme-color" content="#0d0e37">
+  <meta name="theme-color" content="#f7f5ef" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d0e37" media="(prefers-color-scheme: dark)">
   <title>{% block title %}AI USE DECLARED by Selectora{% endblock %}</title>
   <link rel="canonical" href="{{ request.build_absolute_uri }}">
 
