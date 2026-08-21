@@ -5,9 +5,8 @@
     <p class="eyebrow"><span></span> AI USED? SAY HOW.</p>
     <h1>AI USE<br><em>DECLARED</em></h1>
     <p class="hero-intro"><strong>Being open about how AI was used builds trust, gives context to creative work, and makes transparency something to be proud of.</strong></p>
-    <a class="hero-pledge" href="{% url 'transparency_pledge' %}"><span aria-hidden="true">✦</span><span><strong>AI USE DECLARED Transparency Pledge</strong><small>Our commitment to truthful, responsible and verifiable disclosure.</small></span><b aria-hidden="true">Read the pledge →</b></a>
+    <div class="hero-pledge"><span><strong>AI USE DECLARED Transparency Pledge</strong><small>Our commitment to truthful, responsible and verifiable disclosure.</small></span><audio controls preload="metadata" src="{% static 'audio/TTS-AI-transparency-declaration.mp3' %}">Your browser does not support audio playback.</audio><a href="{% url 'transparency_pledge' %}">Read the pledge →</a></div>
     <div class="hero-actions"><a class="hero-declare" href="{% url 'project_create' %}"><span aria-hidden="true">✓</span><span><strong>Declare a project</strong><small>Create a public record of where and how AI was used in a specific project.</small></span><b aria-hidden="true">Start declaration →</b></a></div>
-    <div class="classification-formula" aria-label="One primary badge plus optional qualifiers equals a clear AI disclosure"><span><strong>1</strong> PRIMARY BADGE</span><b>+</b><span>OPTIONAL QUALIFIERS</span><b>=</b><span>CLEAR DISCLOSURE</span></div>
   </div>
   <div class="hero-visual badge-story" role="img" tabindex="0" aria-label="The twelve AI USE DECLARED badges float into primary and qualifier columns. AI-Assisted and Human-Reviewed are selected and placed on a disclosure card. Hover or focus to pause the animation.">
     <div class="story-halo" aria-hidden="true"></div>
@@ -60,6 +59,16 @@
     <p>Each declaration belongs to a person or organisation and describes the use of AI in a specific project.</p>
   </div>
   <article class="path-card single-declaration-path"><div class="step-icon">✓</div><h3>Create a public project declaration</h3><p>Select the badges that describe where and how AI contributed. The declaration is linked to the project, appears in the public registry and can be updated when the process changes.</p><ul><li>A declaration for one specific project</li><li>Public and shareable record</li><li>Downloadable declaration card</li><li>HTML embed for the project website</li></ul><a class="button registered-choice" href="{% url 'project_create' %}">Declare a project <span>→</span></a></article>
+</section>
+
+<section class="beyond-detection" aria-labelledby="beyond-detection-title">
+  <div class="beyond-detection-heading"><p class="eyebrow"><span></span> TRANSPARENCY WITH CONTEXT</p><h2 id="beyond-detection-title">Beyond detection:<br>declare how AI was used.</h2></div>
+  <div class="beyond-detection-copy">
+    <p>The <a href="https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng" target="_blank" rel="noopener">EU AI Act</a> establishes transparency obligations for certain AI systems and AI-generated or manipulated content, including machine-readable markings and disclosure requirements under <a href="https://digital-strategy.ec.europa.eu/en/policies/guidelines-ai-transparency-obligations" target="_blank" rel="noopener">Article 50</a>.</p>
+    <p><strong>AI USE DECLARED goes one step further.</strong> Rather than relying on detectors to guess whether AI was involved, it enables creators and organisations to state it openly: which tools were used, for which tasks, and to what extent.</p>
+    <p>Detectors may indicate possible AI involvement, but they cannot reconstruct the creative process or explain the respective contributions of humans and AI. A clear, public, human-readable and machine-readable self-declaration provides that missing context.</p>
+    <p class="beyond-detection-note"><strong>AI USE DECLARED is aligned with the transparency goals of the EU AI Act and is designed to complement—not replace—legally required markings and provenance systems.</strong></p>
+  </div>
 </section>
 
 <section class="home-badges">

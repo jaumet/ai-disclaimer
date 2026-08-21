@@ -139,16 +139,23 @@ class ProjectTests(TestCase):
 
     def test_public_guide_registry_and_pledge_render(self):
         self.client.logout()
-        for name in ("badge_guide", "certificate_maker", "project_list", "transparency_pledge"):
+        for name in ("badge_guide", "certificate_maker", "project_list", "transparency_pledge", "site_ai_disclosure"):
             response = self.client.get(reverse(name))
             self.assertEqual(response.status_code, 200)
             self.assertContains(response, "aiud-details-ai-use-declared")
-            self.assertContains(response, "688b4cbc-6bb2-47d9-9336-78cff1bfb575")
-            self.assertContains(response, "AI use declared for this website")
-            self.assertContains(response, "PRIMARY DECLARATION")
-            self.assertContains(response, "ADDITIONAL DISCLOSURES")
-            self.assertContains(response, "02-ai-assisted.svg")
-            self.assertContains(response, "01-human-reviewed.svg")
+            self.assertContains(response, reverse("site_ai_disclosure"))
+            self.assertNotContains(response, "688b4cbc-6bb2-47d9-9336-78cff1bfb575")
+            self.assertContains(response, "02-ai-assisted.png")
+            self.assertContains(response, "01-human-reviewed.png")
+
+        home = self.client.get(reverse("home"))
+        self.assertContains(home, "TTS-AI-transparency-declaration.mp3")
+        self.assertNotContains(home, "CLEAR DISCLOSURE")
+        self.assertContains(home, "Beyond detection:")
+        self.assertContains(home, "eur-lex.europa.eu/eli/reg/2024/1689/oj/eng")
+        self.assertContains(home, "complement—not replace")
+        pledge = self.client.get(reverse("transparency_pledge"))
+        self.assertEqual(pledge.content.count(b"<audio"), 1)
 
     def test_no_ai_rejects_ai_qualifier(self):
         form = ProjectForm(data={

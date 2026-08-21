@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% load static %}
+{% block title %}How this website uses AI — AI USE DECLARED{% endblock %}
+{% block content %}
+<article class="site-declaration page-shell">
+  <header class="page-heading"><div><p class="eyebrow"><span></span> THIS WEBSITE · AI USE DECLARED</p><h1>How ai.selectora.cc uses AI.</h1><p>This is the public AI-use declaration for the AI USE DECLARED website itself.</p></div></header>
+  <section class="disclosure-panel">
+    <div class="disclosure-copy"><p class="eyebrow light"><span></span> PRIMARY DECLARATION</p><h2>AI-assisted</h2><p>The project is human-led, with substantial AI participation in its development and content.</p><a class="button" href="{% url 'badge_guide' %}">Read the badge definitions →</a></div>
+    <div class="detail-badges">
+      <img class="primary-display" src="{% static 'badges/primary/02-ai-assisted.png' %}" alt="AI-ASSISTED">
+      <img src="{% static 'badges/secondary/01-human-reviewed.png' %}" alt="HUMAN-REVIEWED">
+      <img src="{% static 'badges/secondary/02-ai-translated.png' %}" alt="AI-TRANSLATED">
+      <img src="{% static 'badges/secondary/04-ai-generated-images.png' %}" alt="AI-GENERATED IMAGES">
+      <img src="{% static 'badges/secondary/05-ai-generated-code.png' %}" alt="AI-GENERATED CODE">
+      <img src="{% static 'badges/secondary/07-ai-generated-text.svg' %}" alt="AI-GENERATED TEXT">
+    </div>
+  </section>
+</article>
+{% endblock %}

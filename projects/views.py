@@ -41,6 +41,10 @@ def transparency_pledge(request):
     return render(request, "projects/pledge.html", {"pledge_version": PLEDGE_VERSION})
 
 
+def site_ai_disclosure(request):
+    return render(request, "projects/site_ai_disclosure.html")
+
+
 def join_initiative(request):
     form = AdhesionForm(request.POST or None)
     joined = False
