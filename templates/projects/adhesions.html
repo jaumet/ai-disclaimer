@@ -32,7 +32,7 @@
         <label class="simple-check">{{ form.display_publicly }} <span>Show my name in the public list of supporters</span></label>
         <div class="adhesion-pledge">
           <div><strong>The Transparency Pledge</strong><p>Joining means committing to truthful, clear and responsible disclosure.</p><a href="{% url 'transparency_pledge' %}" target="_blank">Read the pledge ↗</a></div>
-          <audio controls preload="metadata" src="{% static 'audio/transparency-pledge-en.mp3' %}">Your browser does not support audio playback.</audio>
+          <audio controls preload="metadata" src="{% static 'audio/TTS-AI-transparency-declaration.mp3' %}">Your browser does not support audio playback.</audio>
         </div>
         <label class="simple-check pledge-required">{{ form.accept_pledge }} <span>I have read or listened to and accept the <a href="{% url 'transparency_pledge' %}" target="_blank">Transparency Pledge</a>.</span></label>{{ form.accept_pledge.errors }}
         <button class="button" type="submit">Add my support <span>→</span></button>
