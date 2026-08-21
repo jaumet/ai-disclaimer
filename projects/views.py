@@ -30,7 +30,7 @@ def project_list(request):
 
 
 def badge_guide(request):
-    return render(request, "projects/badge_guide.html")
+    return redirect("/#badges")
 
 
 def certificate_maker(request):

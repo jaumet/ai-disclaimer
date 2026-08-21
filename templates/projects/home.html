@@ -71,22 +71,33 @@
   </div>
 </section>
 
-<section class="home-badges">
+<section class="home-badges" id="badges">
   <div class="section-heading"><div><p class="eyebrow"><span></span> A PROPOSED AI-USE CLASSIFICATION</p><h2>A clear classification.<br>Not fine print.</h2></div><p>Start with exactly one primary category, then add every qualifier that meaningfully describes the process. The result is readable at a glance and detailed when needed.</p></div>
-  <h3 class="badge-row-title">Primary badges <span>Choose one</span></h3>
+  <h3 class="badge-row-title">Choose one overall category</h3>
   <div class="home-badge-grid primary-badge-grid">
-    <a href="{% url 'badge_guide' %}"><img src="{% static 'badges/primary/01-ai-made.png' %}" alt="AI-Made"><span>AI created the essential result.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/primary/02-ai-assisted.png' %}" alt="AI-Assisted"><span>Human-led, with substantial AI help.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/primary/03-ai-edited.png' %}" alt="AI-Edited"><span>Human original, later edited with AI.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/primary/04-no-generative-ai.png' %}" alt="No Generative AI"><span>No generative AI; analytical AI may be used.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/primary/05-no-ai-used.png' %}" alt="No AI Used"><span>No generative or analytical AI used.</span></a>
+    <article><img src="{% static 'badges/primary/01-ai-made.png' %}" alt="AI-Made"><h3>AI-MADE</h3><p>Generative AI produced the main or essential part of the result.</p><small><strong>Example:</strong> an AI-generated illustration art-directed by a person.</small></article>
+    <article><img src="{% static 'badges/primary/02-ai-assisted.png' %}" alt="AI-Assisted"><h3>AI-ASSISTED</h3><p>The work is human-led, with substantial AI contributions to ideas, writing, code, design or production.</p><small><strong>Example:</strong> a human-designed product containing meaningful AI-generated code.</small></article>
+    <article><img src="{% static 'badges/primary/03-ai-edited.png' %}" alt="AI-Edited"><h3>AI-EDITED</h3><p>The original is human-made and AI appears later for correction, retouching, cleanup or post-production.</p><small><strong>Example:</strong> a human photograph cleaned up with generative removal tools.</small></article>
+    <article><img src="{% static 'badges/primary/04-no-generative-ai.png' %}" alt="No Generative AI"><h3>NO GENERATIVE AI</h3><p>No generative AI created or transformed content; analytical AI may still be present.</p><small><strong>Example:</strong> a human-designed app using a recommendation algorithm.</small></article>
+    <article><img src="{% static 'badges/primary/05-no-ai-used.png' %}" alt="No AI Used"><h3>NO AI USED</h3><p>No generative or analytical AI system was used to produce the project.</p><small><strong>Example:</strong> a hand-coded website made without AI-powered tools or features.</small></article>
   </div>
-  <h3 class="badge-row-title">Optional qualifiers <span>Choose any that apply</span></h3>
+  <h3 class="badge-row-title">Add the details that apply</h3>
   <div class="home-badge-grid qualifier-badge-grid">
-    <a href="{% url 'badge_guide' %}"><img src="{% static 'badges/secondary/01-human-reviewed.png' %}" alt="Human-Reviewed"><span>Meaningfully reviewed by a person.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/secondary/02-ai-translated.png' %}" alt="AI-Translated"><span>Significant text translated with AI.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/secondary/03-synthetic-voice.png' %}" alt="Synthetic Voice"><span>Contains synthetic or cloned voice.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/secondary/04-ai-generated-images.png' %}" alt="AI-Generated Images"><span>Contains generative AI imagery.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/secondary/05-ai-generated-code.png' %}" alt="AI-Generated Code"><span>AI generated meaningful code.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/secondary/06-ai-generated-video.svg' %}" alt="AI-Generated Video"><span>Contains AI-generated video.</span></a><a href="{% url 'badge_guide' %}"><img src="{% static 'badges/secondary/07-ai-generated-text.svg' %}" alt="AI-Generated Text"><span>AI materially helped create the text.</span></a>
+    <article><img src="{% static 'badges/secondary/01-human-reviewed.png' %}" alt="Human-Reviewed"><h3>HUMAN-REVIEWED</h3><p>A person meaningfully reviewed the result before publication.</p><small><strong>Example:</strong> an editor checked and corrected an AI-produced draft.</small></article>
+    <article><img src="{% static 'badges/secondary/02-ai-translated.png' %}" alt="AI-Translated"><h3>AI-TRANSLATED</h3><p>A significant part of the text was translated using AI.</p><small><strong>Example:</strong> website copy translated with an AI translation service.</small></article>
+    <article><img src="{% static 'badges/secondary/03-synthetic-voice.png' %}" alt="Synthetic Voice"><h3>SYNTHETIC VOICE</h3><p>The project contains AI-generated narration, synthetic speech or a cloned voice.</p><small><strong>Example:</strong> an explainer narrated using a licensed synthetic voice.</small></article>
+    <article><img src="{% static 'badges/secondary/04-ai-generated-images.png' %}" alt="AI-Generated Images"><h3>AI-GENERATED IMAGES</h3><p>The project contains images created wholly or partly with generative AI.</p><small><strong>Example:</strong> campaign artwork generated from prompts and then edited.</small></article>
+    <article><img src="{% static 'badges/secondary/05-ai-generated-code.png' %}" alt="AI-Generated Code"><h3>AI-GENERATED CODE</h3><p>AI generated a meaningful portion of the code, beyond trivial autocomplete.</p><small><strong>Example:</strong> AI drafted components that a developer reviewed and integrated.</small></article>
+    <article><img src="{% static 'badges/secondary/06-ai-generated-video.svg' %}" alt="AI-Generated Video"><h3>AI-GENERATED VIDEO</h3><p>The project contains video created or materially transformed with generative AI.</p><small><strong>Example:</strong> an AI-generated reel, story, animation or video sequence.</small></article>
+    <article><img src="{% static 'badges/secondary/07-ai-generated-text.svg' %}" alt="AI-Generated Text"><h3>AI-GENERATED TEXT</h3><p>AI meaningfully helped write, synthesise, restructure or expand the text.</p><small><strong>Example:</strong> AI expanded an outline into copy that a person revised.</small></article>
   </div>
-  <div class="badges-action"><a class="text-link" href="{% url 'badge_guide' %}">Read every definition and rule <span>→</span></a></div>
+  <aside class="badge-rules"><strong>Keep it coherent.</strong><span>NO AI USED may only be paired with HUMAN-REVIEWED.</span><span>NO GENERATIVE AI cannot be paired with generative-AI details.</span><span>When in doubt, choose the category that makes AI involvement more visible.</span></aside>
 </section>
 
 {% if projects %}<section class="recent-section">
   <div class="section-heading"><div><p class="eyebrow"><span></span> PUBLIC REGISTRY</p><h2>Recently registered.</h2></div></div>
-  <div class="project-grid">{% for project in projects %}{% include "projects/project_card.html" %}{% endfor %}</div>
+  <ul class="recent-project-list">{% for project in projects %}<li><a href="{{ project.get_absolute_url }}"><strong>{{ project.title }}</strong><span>{{ project.get_primary_badge_display }}</span><time datetime="{{ project.created_at|date:'Y-m-d' }}">{{ project.created_at|date:"M j, Y" }}</time><b aria-hidden="true">→</b></a></li>{% endfor %}</ul>
+  <a class="recent-all-link" href="{% url 'project_list' %}">View all declared projects <span>→</span></a>
 </section>{% endif %}
 
 <section class="cta-band"><div><p class="eyebrow light"><span></span> YOUR WORK. YOUR PROCESS.</p><h2>Ready to make it clear?</h2></div><a class="button button-light" href="{% url 'project_create' %}">Declare a project <span>→</span></a></section>

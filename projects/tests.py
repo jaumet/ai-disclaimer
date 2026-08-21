@@ -139,7 +139,7 @@ class ProjectTests(TestCase):
 
     def test_public_guide_registry_and_pledge_render(self):
         self.client.logout()
-        for name in ("badge_guide", "certificate_maker", "project_list", "transparency_pledge", "site_ai_disclosure"):
+        for name in ("certificate_maker", "project_list", "transparency_pledge", "site_ai_disclosure"):
             response = self.client.get(reverse(name))
             self.assertEqual(response.status_code, 200)
             self.assertContains(response, "aiud-details-ai-use-declared")
@@ -149,12 +149,21 @@ class ProjectTests(TestCase):
             self.assertContains(response, "02-ai-assisted.png")
             self.assertContains(response, "01-human-reviewed.png")
 
+        Project.objects.create(owner=self.user, title="Compact registry example", url="https://example.com", description="Public example.", primary_badge="ai-assisted", is_public=True)
         home = self.client.get(reverse("home"))
         self.assertContains(home, "TTS-AI-transparency-declaration.mp3")
         self.assertNotContains(home, "CLEAR DISCLOSURE")
         self.assertContains(home, "Beyond detection:")
         self.assertContains(home, "eur-lex.europa.eu/eli/reg/2024/1689/oj/eng")
         self.assertContains(home, "complement—not replace")
+        self.assertContains(home, "View all declared projects")
+        self.assertContains(home, "recent-project-list")
+        self.assertNotContains(home, "project-grid")
+        self.assertContains(home, "Choose one overall category")
+        self.assertContains(home, "Add the details that apply")
+        self.assertContains(home, "an AI-generated illustration art-directed by a person")
+        self.assertNotContains(home, "Read every definition and rule")
+        self.assertRedirects(self.client.get(reverse("badge_guide")), "/#badges", fetch_redirect_response=False)
         pledge = self.client.get(reverse("transparency_pledge"))
         self.assertEqual(pledge.content.count(b"<audio"), 1)
 
