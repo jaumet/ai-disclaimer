@@ -221,6 +221,23 @@ ${imageHtml}
     });
     updateMaker();
   }
+  document.querySelectorAll("[data-compact-audio]").forEach(player => {
+    const audio = player.querySelector("audio");
+    const time = player.querySelector("[data-audio-time]");
+    const volume = player.querySelector("[data-audio-volume]");
+    const formatTime = seconds => {
+      if (!Number.isFinite(seconds)) return "0:00";
+      return `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, "0")}`;
+    };
+    const updateTime = () => time.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+    player.querySelector("[data-audio-play]").addEventListener("click", () => audio.play().catch(() => {}));
+    player.querySelector("[data-audio-pause]").addEventListener("click", () => audio.pause());
+    player.querySelector("[data-audio-stop]").addEventListener("click", () => { audio.pause(); audio.currentTime = 0; updateTime(); });
+    volume.addEventListener("input", () => { audio.volume = Number(volume.value); });
+    audio.addEventListener("loadedmetadata", updateTime);
+    audio.addEventListener("timeupdate", updateTime);
+    audio.addEventListener("ended", updateTime);
+  });
   const form = document.querySelector("[data-badge-form]");
   if (!form) return;
   const primaryInputs = [...form.querySelectorAll('input[name="primary_badge"]')];
