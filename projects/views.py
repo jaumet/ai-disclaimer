@@ -2,6 +2,7 @@ from datetime import date
 
 from django.shortcuts import redirect, render
 
+from .email import send_adhesion_confirmation
 from .forms import AdhesionForm
 from .models import Adhesion, PLEDGE_VERSION
 
@@ -54,6 +55,7 @@ def join_initiative(request):
         adhesion = form.save(commit=False)
         adhesion.pledge_version = PLEDGE_VERSION
         adhesion.save()
+        send_adhesion_confirmation(adhesion)
         joined = True
         form = AdhesionForm()
     adhesions = Adhesion.objects.all()

@@ -1,10 +1,18 @@
+import os
+import subprocess
+import sys
+from unittest.mock import patch
+
+from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.core import mail
+from django.test import SimpleTestCase, TestCase, override_settings
 from django.urls import reverse
 
 from .models import Adhesion
 
 
+@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
 class AdhesionTests(TestCase):
     def test_joining_needs_no_account_and_accepts_pledge(self):
         response = self.client.post(reverse("join_initiative"), {
@@ -20,6 +28,15 @@ class AdhesionTests(TestCase):
         self.assertEqual(adhesion.email, "maker@example.com")
         self.assertEqual(adhesion.pledge_version, "1.0")
         self.assertEqual(get_user_model().objects.count(), 0)
+        self.assertEqual(len(mail.outbox), 1)
+        confirmation = mail.outbox[0]
+        self.assertEqual(confirmation.to, ["maker@example.com"])
+        self.assertEqual(confirmation.from_email, settings.DEFAULT_FROM_EMAIL)
+        self.assertEqual(confirmation.subject, "Thank you for supporting AI Use Declared")
+        self.assertIn("Hello Open Maker,", confirmation.body)
+        self.assertIn("version 1.0 of the Transparency Pledge", confirmation.body)
+        self.assertIn("Your support has been recorded.", confirmation.body)
+        self.assertIn("https://ai.selectora.cc/", confirmation.body)
 
     def test_pledge_and_organization_name_are_required(self):
         response = self.client.post(reverse("join_initiative"), {
@@ -28,6 +45,38 @@ class AdhesionTests(TestCase):
         self.assertContains(response, "Enter the organization")
         self.assertContains(response, "Accept the Transparency Pledge")
         self.assertFalse(Adhesion.objects.exists())
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_duplicate_email_does_not_send_a_second_confirmation(self):
+        data = {
+            "full_name": "One Supporter",
+            "email": "same@example.com",
+            "supporter_type": "person",
+            "accept_pledge": "on",
+        }
+        self.assertEqual(self.client.post(reverse("join_initiative"), data).status_code, 200)
+        self.assertEqual(len(mail.outbox), 1)
+        duplicate = {**data, "full_name": "Duplicate Supporter"}
+        response = self.client.post(reverse("join_initiative"), duplicate)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Adhesion.objects.count(), 1)
+        self.assertEqual(len(mail.outbox), 1)
+
+    @patch("projects.email.send_mail", side_effect=RuntimeError("temporary backend failure"))
+    def test_email_backend_failure_does_not_remove_adhesion_or_return_500(self, mocked_send):
+        with self.assertLogs("projects.email", level="ERROR") as captured:
+            response = self.client.post(reverse("join_initiative"), {
+                "full_name": "Saved Supporter",
+                "email": "saved@example.com",
+                "supporter_type": "person",
+                "accept_pledge": "on",
+            })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "You’re part of it")
+        self.assertTrue(Adhesion.objects.filter(email="saved@example.com").exists())
+        mocked_send.assert_called_once()
+        self.assertIn("error_type=RuntimeError", captured.output[0])
+        self.assertNotIn("saved@example.com", captured.output[0])
 
     def test_campaign_lists_public_organizations_before_people(self):
         Adhesion.objects.create(full_name="Private", email="private@example.com", display_publicly=False)
@@ -116,3 +165,40 @@ class PublicSiteTests(TestCase):
         response = self.client.get("/admin/")
         self.assertEqual(response.status_code, 302)
         self.assertIn("/admin/login/", response.url)
+
+
+class EmailSettingsTests(SimpleTestCase):
+    def _settings_process(self, email_backend):
+        environment = os.environ.copy()
+        environment.pop("RESEND_API_KEY", None)
+        environment.pop("DEFAULT_FROM_EMAIL", None)
+        environment["EMAIL_BACKEND"] = email_backend
+        environment["DJANGO_SETTINGS_MODULE"] = "config.settings"
+        return subprocess.run(
+            [
+                sys.executable,
+                "-c",
+                "import django; django.setup(); "
+                "from django.conf import settings; "
+                "assert settings.DEFAULT_FROM_EMAIL == "
+                "'AI Use Declared <noreply@selectora.cc>'",
+            ],
+            cwd=settings.BASE_DIR,
+            env=environment,
+            capture_output=True,
+            text=True,
+            timeout=20,
+            check=False,
+        )
+
+    def test_console_backend_loads_without_resend_api_key(self):
+        result = self._settings_process("django.core.mail.backends.console.EmailBackend")
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_smtp_backend_requires_resend_api_key(self):
+        result = self._settings_process("django.core.mail.backends.smtp.EmailBackend")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn(
+            "RESEND_API_KEY is required when the SMTP email backend is enabled.",
+            result.stderr + result.stdout,
+        )

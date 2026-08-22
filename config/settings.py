@@ -1,4 +1,7 @@
+import os
 from pathlib import Path
+
+from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -51,5 +54,30 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = "request_magic_link"
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-DEFAULT_FROM_EMAIL = "AI USE: DECLARED by Selectora <hello@ai.selectora.cc>"
+
+RESEND_API_KEY = os.getenv("RESEND_API_KEY", "").strip()
+
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend",
+).strip()
+
+EMAIL_HOST = "smtp.resend.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "resend"
+EMAIL_HOST_PASSWORD = RESEND_API_KEY
+EMAIL_USE_TLS = True
+EMAIL_TIMEOUT = 10
+
+DEFAULT_FROM_EMAIL = os.getenv(
+    "DEFAULT_FROM_EMAIL",
+    "AI Use Declared <noreply@selectora.cc>",
+)
+
+if (
+    EMAIL_BACKEND == "django.core.mail.backends.smtp.EmailBackend"
+    and not RESEND_API_KEY
+):
+    raise ImproperlyConfigured(
+        "RESEND_API_KEY is required when the SMTP email backend is enabled."
+    )
