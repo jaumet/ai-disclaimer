@@ -69,7 +69,7 @@
         .aiud-widget:hover .aiud-details,.aiud-widget:focus-within .aiud-details{visibility:visible;opacity:1;transform:none;pointer-events:auto}
         .aiud-badges{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.aiud-badges img{display:block;width:100%;height:auto;border-radius:4px}
       </style>
-      <a class="aiud-trigger" href="{% url 'site_ai_disclosure' %}" target="aiud_disclosure" aria-describedby="aiud-details-ai-use-declared" onclick="window.open(this.href,'aiud_disclosure','popup=yes,width=680,height=760,resizable=yes,scrollbars=yes');return false;">
+      <a class="aiud-trigger" href="{% url 'site_ai_disclosure' %}" target="_blank" rel="noopener" aria-describedby="aiud-details-ai-use-declared">
         <span class="aiud-logo"><img src="https://ai.selectora.cc/static/images/ai-use-declared-logo.png" alt=""></span>
         <span class="aiud-label">AI USE DECLARED<small>Hover to see how AI was used</small></span>
       </a>

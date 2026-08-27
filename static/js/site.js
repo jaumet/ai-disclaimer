@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const publicBadgePath = (source, format) => new URL(source, window.location.origin).pathname
+    .replace(/\.[0-9a-f]{8,64}(?=\.(?:png|svg)$)/i, "")
+    .replace(/\.(?:png|svg)$/i, `.${format}`);
   document.querySelectorAll("[data-card-editor]").forEach(editor => {
     const scope = editor.closest("[data-certificate-maker], [data-project-tools]");
     const preview = scope?.querySelector("[data-card-preview]");
@@ -95,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const disclosurePath = projectTools.dataset.disclosureUrl;
     const disclosureUrl = `https://ai.selectora.cc${disclosurePath}`;
     const imageHtml = badgeElements.map(element => {
-      const path = new URL(element.src, window.location.origin).pathname.replace(/\.(png|svg)$/i, ".svg");
+      const path = publicBadgePath(element.src, "png");
       return `      <img src="https://ai.selectora.cc${path}" alt="${escapeMarkup(element.dataset.label)} disclosure badge" loading="lazy">`;
     }).join("\n");
     embed.value = `<div class="aiud-widget">
@@ -108,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .aiud-widget:hover .aiud-details,.aiud-widget:focus-within .aiud-details{visibility:visible;opacity:1;transform:none;pointer-events:auto}
     .aiud-details p{margin:0 0 10px}.aiud-badges{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.aiud-badges img{display:block;width:100%;height:auto;border-radius:5px}.aiud-badges img:first-child{grid-column:1/-1}.aiud-details>a{display:inline-block;margin-top:10px;color:#0d0e37;font-weight:750;text-underline-offset:3px}.aiud-details .aiud-meaning{display:block;padding-top:9px;border-top:1px solid #ddd;font-size:11px}
   </style>
-  <a class="aiud-trigger" href="${disclosureUrl}" target="aiud_disclosure" aria-describedby="aiud-details-${slug}" onclick="window.open(this.href,'aiud_disclosure','popup=yes,width=680,height=760,resizable=yes,scrollbars=yes');return false;">
+  <a class="aiud-trigger" href="${disclosureUrl}" target="_blank" rel="noopener" aria-describedby="aiud-details-${slug}">
     <span class="aiud-logo"><img src="https://ai.selectora.cc/static/images/ai-use-declared-logo.png" alt=""></span>
     <span class="aiud-label">AI USE DECLARED<small>Hover to see how AI was used</small></span>
   </a>
@@ -192,7 +195,7 @@ ${imageHtml}
       const backgroundColor = background === "transparent" ? "transparent" : background === "dark" ? "#0d0e37" : "#ffffff";
       const textColor = background === "dark" ? "#ffffff" : "#0d0e37";
       const imageHtml = selected.map((input, index) => {
-        const localPath = new URL(input.dataset.src, window.location.origin).pathname.replace(/\.(png|svg)$/i, `.${format}`);
+        const localPath = publicBadgePath(input.dataset.src, format);
         const remoteSrc = `https://ai.selectora.cc${localPath}`;
         const horizontalImageStyle = layout === "horizontal" ? ` style="display:block;width:0;min-width:0;flex:${index === 0 ? "1.4" : "1"} 1 0;height:auto"` : "";
         return `  <img src="${remoteSrc}" alt="${escapeHtml(input.value)}: AI use disclosure badge" loading="lazy"${horizontalImageStyle}>`;
@@ -224,20 +227,41 @@ ${imageHtml}
       const selected = getSelected();
       if (!selected.length) return null;
       const images = await Promise.all(selected.map(input => loadImage(input.dataset.src)));
-      const width = 1200, padding = 72, gap = 18, badgeWidth = width - padding * 2;
-      const isHorizontal = makerPreview.dataset.cardLayout === "horizontal";
+      const layout = makerPreview.dataset.cardLayout || "standard";
+      const isHorizontal = layout === "horizontal";
+      const isMinimal = layout === "minimal";
+      const width = isHorizontal ? 1600 : isMinimal ? 760 : 1200;
+      const padding = isMinimal ? 38 : 72;
+      const gap = isMinimal ? 10 : 18;
+      const badgeWidth = width - padding * 2;
       const totalWeight = isHorizontal ? 1.4 + Math.max(0, images.length - 1) : 0;
       const horizontalUnit = isHorizontal ? (badgeWidth - gap * Math.max(0, images.length - 1)) / totalWeight : 0;
-      const itemWidths = images.map((image, index) => isHorizontal ? horizontalUnit * (index === 0 ? 1.4 : 1) : index === 0 ? badgeWidth : (badgeWidth - gap) / 2);
+      const minimalWidth = (badgeWidth - gap * 2) / 3;
+      const itemWidths = images.map((image, index) => {
+        if (isHorizontal) return horizontalUnit * (index === 0 ? 1.4 : 1);
+        if (isMinimal) return minimalWidth;
+        return index === 0 ? badgeWidth : (badgeWidth - gap) / 2;
+      });
       const heights = images.map((image, index) => {
         const itemWidth = itemWidths[index];
         return itemWidth * image.naturalHeight / image.naturalWidth;
       });
-      let badgeHeight = isHorizontal ? Math.max(...heights) : heights[0];
-      if (!isHorizontal) for (let index = 1; index < heights.length; index += 2) badgeHeight += gap + Math.max(...heights.slice(index, index + 2));
+      let badgeHeight;
+      if (isHorizontal) badgeHeight = Math.max(...heights);
+      else if (isMinimal) {
+        badgeHeight = 0;
+        for (let index = 0; index < heights.length; index += 3) {
+          badgeHeight += Math.max(...heights.slice(index, index + 3));
+          if (index + 3 < heights.length) badgeHeight += gap;
+        }
+      } else {
+        badgeHeight = heights[0];
+        for (let index = 1; index < heights.length; index += 2) badgeHeight += gap + Math.max(...heights.slice(index, index + 2));
+      }
+      const badgeY = isMinimal ? 178 : 270;
       const canvas = document.createElement("canvas");
       canvas.width = width;
-      canvas.height = Math.ceil(330 + badgeHeight + 55);
+      canvas.height = Math.ceil(badgeY + badgeHeight + (isMinimal ? 38 : 55));
       const context = canvas.getContext("2d");
       const background = makerPreview.dataset.cardBackground || "light";
       const accent = makerPreview.dataset.cardAccent || "#f7836a";
@@ -247,16 +271,29 @@ ${imageHtml}
         context.fillRect(0, 0, canvas.width, canvas.height);
       }
       context.strokeStyle = accent; context.lineWidth = 5; context.strokeRect(3, 3, width - 6, canvas.height - 6);
-      context.fillStyle = foreground; context.font = "800 24px Arial"; context.fillText("AI USE DECLARED · BY SELECTORA", padding, 80);
-      context.font = "800 48px Arial"; context.fillText("AI-use declaration", padding, 165);
-      context.font = "700 27px Arial"; context.fillText("This work declares its use of AI as:", padding, 220);
-      let y = 270;
+      context.fillStyle = foreground;
+      context.font = isMinimal ? "800 16px Arial" : "800 24px Arial";
+      context.fillText("AI USE DECLARED · BY SELECTORA", padding, isMinimal ? 45 : 80);
+      context.font = isMinimal ? "800 30px Arial" : "800 48px Arial";
+      context.fillText("AI-use declaration", padding, isMinimal ? 101 : 165);
+      context.font = isMinimal ? "700 17px Arial" : "700 27px Arial";
+      context.fillText("This work declares its use of AI as:", padding, isMinimal ? 139 : 220);
+      let y = badgeY;
       let horizontalX = padding;
       images.forEach((image, index) => {
         if (isHorizontal) {
           const itemWidth = itemWidths[index];
           context.drawImage(image, horizontalX, y + (badgeHeight - heights[index]) / 2, itemWidth, heights[index]);
           horizontalX += itemWidth + gap;
+          return;
+        }
+        if (isMinimal) {
+          const column = index % 3;
+          context.drawImage(image, padding + column * (minimalWidth + gap), y, minimalWidth, heights[index]);
+          if (column === 2 || index === images.length - 1) {
+            const rowStart = index - column;
+            y += Math.max(...heights.slice(rowStart, rowStart + 3)) + gap;
+          }
           return;
         }
         const isPrimary = index === 0;
