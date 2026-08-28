@@ -159,7 +159,11 @@ ${imageHtml}
     const note = maker.querySelector("[data-maker-note]");
     const emptyState = maker.querySelector("[data-maker-empty]");
     const embedFormat = maker.querySelector("[data-embed-format]");
+    const embedMode = maker.querySelector("[data-embed-mode]");
+    const embedModeButtons = [...maker.querySelectorAll("[data-select-embed-mode]")];
     const embedCode = maker.querySelector("[data-embed-code]");
+    const fullEmbedPreview = maker.querySelector("[data-embed-full-preview]");
+    const compactEmbedPreview = maker.querySelector("[data-embed-compact-preview]");
     const copyButton = maker.querySelector("[data-copy-embed]");
     const copyStatus = maker.querySelector("[data-copy-status]");
     const makerPreview = maker.querySelector("[data-maker-preview]");
@@ -194,17 +198,34 @@ ${imageHtml}
       const accent = makerPreview.dataset.cardAccent || "#f7836a";
       const backgroundColor = background === "transparent" ? "transparent" : background === "dark" ? "#0d0e37" : "#ffffff";
       const textColor = background === "dark" ? "#ffffff" : "#0d0e37";
-      const imageHtml = selected.map((input, index) => {
-        const localPath = publicBadgePath(input.dataset.src, format);
-        const remoteSrc = `https://ai.selectora.cc${localPath}`;
-        const horizontalImageStyle = layout === "horizontal" ? ` style="display:block;width:0;min-width:0;flex:${index === 0 ? "1.4" : "1"} 1 0;height:auto"` : "";
-        return `  <img src="${remoteSrc}" alt="${escapeHtml(input.value)}: AI use disclosure badge" loading="lazy"${horizontalImageStyle}>`;
+      const imageSources = selected.map(input => ({
+        label: escapeHtml(input.value),
+        src: `https://ai.selectora.cc${publicBadgePath(input.dataset.src, format)}`,
+      }));
+      const imageHtml = imageSources.map((image, index) => {
+        let imageStyle = "display:block;width:100%;height:auto";
+        if (layout === "horizontal") imageStyle = `display:block;width:0;min-width:0;flex:${index === 0 ? "1.4" : "1"} 1 0;height:auto`;
+        else if (layout === "standard" && index === 0) imageStyle += ";grid-column:1/-1";
+        return `  <img src="${image.src}" alt="${image.label}: AI use disclosure badge" loading="lazy" style="${imageStyle}">`;
       }).join("\n");
       const layoutCss = layout === "minimal" ? "max-width:420px;padding:10px" : "max-width:680px;padding:18px";
-      const badgeLayoutCss = layout === "horizontal" ? "display:flex;align-items:center;gap:5px;overflow:hidden" : "display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px";
-      embedCode.value = primary ? `<div class="ai-use-declared" style="${layoutCss};box-sizing:border-box;border:1px solid ${accent};border-radius:10px;background:${backgroundColor};color:${textColor};font:14px/1.4 system-ui,sans-serif" aria-label="AI use self-declaration">\n  <p style="margin:0 0 8px"><strong>This work</strong> declares its use of AI as:</p>\n  <div style="${badgeLayoutCss};color:inherit">\n${imageHtml}\n  </div>\n  <a href="https://ai.selectora.cc/badges/" style="display:block;margin-top:8px;padding-top:8px;border-top:1px solid ${accent};color:inherit;font-size:11px;font-weight:700">What does this mean? Explore AI USE DECLARED →</a>\n</div>` : "Choose a main AI use in step 1 to generate the embed code.";
+      const badgeLayoutCss = layout === "horizontal" ? "display:flex;align-items:center;gap:5px;overflow:hidden" : `display:grid;grid-template-columns:repeat(${layout === "minimal" ? "3" : "2"},minmax(0,1fr));gap:5px`;
+      const fullHtml = `<div class="ai-use-declared" style="${layoutCss};box-sizing:border-box;border:1px solid ${accent};border-radius:10px;background:${backgroundColor};color:${textColor};font:14px/1.4 system-ui,sans-serif" aria-label="AI use self-declaration">\n  <p style="margin:0 0 8px"><strong>This work</strong> declares its use of AI as:</p>\n  <div style="${badgeLayoutCss};color:inherit">\n${imageHtml}\n  </div>\n  <a href="https://ai.selectora.cc/badges/" target="_blank" rel="noopener" style="display:block;margin-top:8px;padding-top:8px;border-top:1px solid ${accent};color:inherit;font-size:11px;font-weight:700">What does this mean? Explore AI USE DECLARED →</a>\n</div>`;
+      const compactImages = imageSources.map((image, index) => `      <img src="${image.src}" alt="${image.label}: AI use disclosure badge" loading="lazy" style="display:block;width:100%;height:auto${index === 0 ? ";grid-column:1/-1" : ""}">`).join("\n");
+      const compactHtml = `<div class="aiud-widget" style="position:relative;display:inline-block;color:#0d0e37;font:14px/1.4 system-ui,sans-serif">\n  <style>\n    .aiud-widget .aiud-details{position:absolute;z-index:2147483647;left:0;bottom:calc(100% + 9px);visibility:hidden;opacity:0;transform:translateY(5px);width:min(370px,90vw);box-sizing:border-box;padding:15px;border:1px solid #d5d5dc;border-radius:11px;background:#fff;box-shadow:0 18px 45px #0d0e3728;transition:.18s ease;pointer-events:none}\n    .aiud-widget:hover .aiud-details,.aiud-widget:focus-within .aiud-details{visibility:visible;opacity:1;transform:none;pointer-events:auto}\n  </style>\n  <a href="https://ai.selectora.cc/badges/" target="_blank" rel="noopener" aria-describedby="aiud-details" style="display:flex;align-items:center;gap:9px;width:max-content;max-width:100%;padding:7px 10px 7px 7px;border:1px solid #d5d5dc;border-radius:8px;background:#fff;color:#0d0e37;text-decoration:none;box-shadow:0 4px 12px #0d0e3712">\n    <span style="width:42px;height:42px;flex:0 0 42px;overflow:hidden;border-radius:50%"><img src="https://ai.selectora.cc/static/images/ai-use-declared-logo.png" alt="" style="display:block;width:100%;height:100%;object-fit:cover"></span>\n    <strong style="letter-spacing:.03em">AI USE DECLARED<small style="display:block;color:#66677d;font-size:10px;letter-spacing:0">Hover to see how this site uses AI</small></strong>\n  </a>\n  <div class="aiud-details" id="aiud-details" role="tooltip">\n    <p style="margin:0 0 10px"><strong>This site</strong> declares its use of AI as:</p>\n    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px">\n${compactImages}\n    </div>\n  </div>\n</div>`;
+      fullEmbedPreview.innerHTML = primary ? fullHtml : "<small>Choose a main badge to preview this option.</small>";
+      compactEmbedPreview.innerHTML = primary ? compactHtml : "<small>Choose a main badge to preview this option.</small>";
+      const selectedEmbedMode = embedMode.value;
+      maker.querySelectorAll("[data-embed-option]").forEach(option => option.classList.toggle("is-selected", option.dataset.embedOption === selectedEmbedMode));
+      embedModeButtons.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.selectEmbedMode === selectedEmbedMode)));
+      embedCode.value = primary ? (selectedEmbedMode === "compact" ? compactHtml : fullHtml) : "Choose a main AI use in step 1 to generate the embed code.";
     }
-    [...primaryInputs, ...qualifierInputs, embedFormat].forEach(input => input.addEventListener("change", updateMaker));
+    [...primaryInputs, ...qualifierInputs, embedFormat, embedMode].forEach(input => input.addEventListener("change", updateMaker));
+    embedModeButtons.forEach(button => button.addEventListener("click", () => {
+      embedMode.value = button.dataset.selectEmbedMode;
+      updateMaker();
+      embedCode.focus();
+    }));
     makerPreview.addEventListener("cardstylechange", updateMaker);
     copyButton.addEventListener("click", async () => {
       try {

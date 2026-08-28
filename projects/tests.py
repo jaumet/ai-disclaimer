@@ -154,7 +154,10 @@ class PublicSiteTests(TestCase):
         self.assertContains(response, "Download or embed")
         self.assertContains(response, "Download PNG")
         self.assertContains(response, "Download SVG")
-        self.assertContains(response, "Copy generated HTML")
+        self.assertContains(response, "Embedded code type")
+        self.assertContains(response, "All badges — always visible")
+        self.assertContains(response, "AI USE DECLARED logo — badges on hover")
+        self.assertContains(response, "Copy selected HTML")
 
     def test_old_registry_and_account_urls_redirect_to_maker(self):
         for path in ("/made-openly/", "/auth/sign-in/", "/dashboard/", "/projects/new/"):
