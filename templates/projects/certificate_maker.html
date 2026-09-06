@@ -1,7 +1,7 @@
 {% extends "base.html" %}{% load static %}{% block title %}Choose an AI declaration — AI USE DECLARED{% endblock %}
 {% block content %}
 <section class="maker-hero"><p class="eyebrow"><span></span> AI-USE SELF-DECLARATION</p><h1>Choose an AI declaration for your work.</h1><p>Select the badges that best describe the use of AI. Nothing is uploaded or saved: the result belongs entirely to you.</p><a class="text-link maker-guide-link" href="{% url 'badge_guide' %}">Read all badge definitions before choosing →</a></section>
-<section class="maker-layout" data-certificate-maker>
+<section class="maker-layout" data-certificate-maker data-count-url="{% url 'record_badge_configuration' %}">
   <form class="maker-controls" onsubmit="return false">
     <fieldset class="maker-step"><legend><span>1</span><strong>Choose the main AI use</strong></legend>
       <p class="maker-step-help">Start with the single category that best describes the overall role of AI in the work.</p>

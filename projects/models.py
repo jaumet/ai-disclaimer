@@ -22,6 +22,14 @@ QUALIFIER_BADGES = [
 PLEDGE_VERSION = "1.0"
 
 
+class SiteMetric(models.Model):
+    key = models.CharField(max_length=50, unique=True)
+    value = models.PositiveBigIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.key}: {self.value}"
+
+
 class Adhesion(models.Model):
     SUPPORTER_TYPES = [("person", "A person"), ("organization", "An organization")]
     COMMENT_STATUSES = [("clean", "OK"), ("needs_review", "NEEDS REVIEW")]

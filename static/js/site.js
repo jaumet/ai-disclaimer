@@ -170,6 +170,20 @@ ${imageHtml}
     const downloadButtons = [...maker.querySelectorAll("[data-download-pdf], [data-download-png], [data-download-svg]")];
     const escapeHtml = value => value.replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[char]);
     const getSelected = () => [primaryInputs.find(input => input.checked), ...qualifierInputs.filter(input => input.checked)].filter(Boolean);
+    const recordConfiguration = () => {
+      const storageKey = "aiud-badge-configuration-counted";
+      if (sessionStorage.getItem(storageKey)) return;
+      sessionStorage.setItem(storageKey, "pending");
+      const csrfToken = document.cookie.split("; ").find(row => row.startsWith("csrftoken="))?.split("=")[1];
+      fetch(maker.dataset.countUrl, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {"X-CSRFToken": csrfToken || ""},
+      }).then(response => {
+        if (!response.ok) throw new Error("Could not record badge configuration");
+        sessionStorage.setItem(storageKey, "yes");
+      }).catch(() => sessionStorage.removeItem(storageKey));
+    };
     function updateMaker() {
       const primary = primaryInputs.find(input => input.checked);
       const restricted = ["NO AI USED", "NO GENERATIVE AI"].includes(primary?.value);
@@ -220,7 +234,11 @@ ${imageHtml}
       embedModeButtons.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.selectEmbedMode === selectedEmbedMode)));
       embedCode.value = primary ? (selectedEmbedMode === "compact" ? compactHtml : fullHtml) : "Choose a main AI use in step 1 to generate the embed code.";
     }
-    [...primaryInputs, ...qualifierInputs, embedFormat, embedMode].forEach(input => input.addEventListener("change", updateMaker));
+    primaryInputs.forEach(input => input.addEventListener("change", () => {
+      updateMaker();
+      if (input.checked) recordConfiguration();
+    }));
+    [...qualifierInputs, embedFormat, embedMode].forEach(input => input.addEventListener("change", updateMaker));
     embedModeButtons.forEach(button => button.addEventListener("click", () => {
       embedMode.value = button.dataset.selectEmbedMode;
       updateMaker();

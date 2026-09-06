@@ -5,6 +5,7 @@ urlpatterns = [
     path("", views.home, name="home"),
     path("badges/", views.badge_guide, name="badge_guide"),
     path("create-declaration/", views.declaration_maker, name="declaration_maker"),
+    path("create-declaration/count/", views.record_badge_configuration, name="record_badge_configuration"),
     path("transparency-pledge/", views.transparency_pledge, name="transparency_pledge"),
     path("ai-use/", views.site_ai_disclosure, name="site_ai_disclosure"),
     path("join/", views.join_initiative, name="join_initiative"),

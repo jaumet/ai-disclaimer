@@ -9,7 +9,7 @@ from django.core import mail
 from django.test import SimpleTestCase, TestCase, override_settings
 from django.urls import reverse
 
-from .models import Adhesion
+from .models import Adhesion, SiteMetric
 
 
 @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
@@ -108,6 +108,20 @@ class AdhesionTests(TestCase):
 
 
 class PublicSiteTests(TestCase):
+    def test_badge_configuration_counter_starts_at_123_and_increments(self):
+        response = self.client.get(reverse("home"))
+        self.assertContains(response, "123")
+        self.assertContains(response, "badge declarations configured")
+
+        self.client.get(reverse("declaration_maker"))
+        response = self.client.post(reverse("record_badge_configuration"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["count"], 124)
+        self.assertEqual(SiteMetric.objects.get(key="badge_configurations").value, 124)
+
+    def test_badge_configuration_counter_rejects_get(self):
+        self.assertEqual(self.client.get(reverse("record_badge_configuration")).status_code, 405)
+
     def test_core_pages_render_without_account_links(self):
         for name in ("home", "badge_guide", "declaration_maker", "transparency_pledge", "site_ai_disclosure", "join_initiative"):
             response = self.client.get(reverse(name))

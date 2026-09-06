@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Adhesion
+from .models import Adhesion, SiteMetric
+
+admin.site.register(SiteMetric)
 
 @admin.register(Adhesion)
 class AdhesionAdmin(admin.ModelAdmin):

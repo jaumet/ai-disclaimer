@@ -1,18 +1,33 @@
 from datetime import date
 
+from django.db.models import F
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.http import require_POST
 
 from .email import send_adhesion_confirmation
 from .forms import AdhesionForm
-from .models import Adhesion, PLEDGE_VERSION
+from .models import Adhesion, PLEDGE_VERSION, SiteMetric
 
 
 CAMPAIGN_STARTED_ON = date(2026, 8, 21)
+BADGE_CONFIGURATION_KEY = "badge_configurations"
+BADGE_CONFIGURATION_INITIAL_VALUE = 123
+
+
+def badge_configuration_count():
+    metric, _ = SiteMetric.objects.get_or_create(
+        key=BADGE_CONFIGURATION_KEY,
+        defaults={"value": BADGE_CONFIGURATION_INITIAL_VALUE},
+    )
+    return metric.value
 
 
 def home(request):
     return render(request, "projects/home.html", {
         "adhesion_count": Adhesion.objects.count(),
+        "badge_configuration_count": badge_configuration_count(),
         "primary_badge_summary": [
             ("badges/primary/01-ai-made.png", "AI-Made"),
             ("badges/primary/02-ai-assisted.png", "AI-Assisted"),
@@ -36,8 +51,20 @@ def badge_guide(request):
     return render(request, "projects/badge_guide.html")
 
 
+@ensure_csrf_cookie
 def declaration_maker(request):
     return render(request, "projects/certificate_maker.html")
+
+
+@require_POST
+def record_badge_configuration(request):
+    metric, _ = SiteMetric.objects.get_or_create(
+        key=BADGE_CONFIGURATION_KEY,
+        defaults={"value": BADGE_CONFIGURATION_INITIAL_VALUE},
+    )
+    SiteMetric.objects.filter(pk=metric.pk).update(value=F("value") + 1)
+    metric.refresh_from_db(fields=["value"])
+    return JsonResponse({"count": metric.value})
 
 
 def transparency_pledge(request):
